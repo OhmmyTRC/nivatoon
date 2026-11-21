@@ -1,0 +1,41 @@
+{
+  "slug": "unrivaled-system",
+  "folder": "03-unrivaled-system",
+  "title": "ระบบเทพไร้พ่าย",
+  "sub": "UNRIVALED SYSTEM",
+  "synopsis": "เมื่อดันเจี้ยนระดับ S ปะทุขึ้นใจกลางกรุงโซล เด็กหนุ่มผู้ถูกทอดทิ้งกลับปลุกหน้าต่างระบบปริศนาที่เปลี่ยนทุกบาดแผลให้กลายเป็นค่าสถานะระดับเทพ",
+  "author": "KANG JIN & REDICE",
+  "origin": "korea",
+  "status": "ongoing",
+  "genres": [
+    "action",
+    "fantasy"
+  ],
+  "rating": 4.9,
+  "views": "24.7M อ่าน",
+  "followers": "510K ติดตาม",
+  "badge": "TOP 1",
+  "updateDay": "เสาร์",
+  "tone": "from-amber-300 to-stone-900",
+  "latestChapter": 3,
+  "episodes": [
+    {
+      "dir": "ep-01",
+      "number": 1,
+      "title": "หน้าต่างระบบสีทอง (RAW KR + TH Demo)",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-02",
+      "number": 2,
+      "title": "กิลด์ใหญ่เริ่มเคลื่อนไหว",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-03",
+      "number": 3,
+      "title": "ทลายขีดจำกัดแรงก์ S",
+      "coinPrice": 5
+    }
+  ]
+}

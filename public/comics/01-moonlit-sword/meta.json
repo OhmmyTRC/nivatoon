@@ -1,0 +1,41 @@
+{
+  "slug": "moonlit-sword",
+  "folder": "01-moonlit-sword",
+  "title": "ดาบจันทราเหนือมหานคร",
+  "sub": "MOONLIT SWORD",
+  "synopsis": "มหานครที่ไม่มีใครเคยเห็นดวงจันทร์มานานร้อยปี จนกระทั่งคืนหนึ่ง “ยูนา” เด็กส่งของชั้นล่างสุดพบดาบโบราณที่ตอบสนองต่อแสงจันทร์ในความทรงจำของเธอ เธอจึงต้องเลือกระหว่างการแก้แค้นกับการปกป้องเมืองสุดท้าย",
+  "author": "HANA STUDIO",
+  "origin": "korea",
+  "status": "ongoing",
+  "genres": [
+    "fantasy",
+    "action"
+  ],
+  "rating": 4.9,
+  "views": "18.4M อ่าน",
+  "followers": "382K ติดตาม",
+  "badge": "HOT",
+  "updateDay": "ศุกร์",
+  "tone": "from-emerald-300 to-slate-900",
+  "latestChapter": 3,
+  "episodes": [
+    {
+      "dir": "ep-01",
+      "number": 1,
+      "title": "คืนที่แสงจันทร์กลับมา (RAW KR + TH Demo)",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-02",
+      "number": 2,
+      "title": "เงาผู้พิทักษ์แห่งเขต 9",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-03",
+      "number": 3,
+      "title": "คำสาบานใต้แสงสีเขียว",
+      "coinPrice": 5
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "slug": "palace-bloom",
+  "folder": "02-palace-bloom",
+  "title": "บุปผาแห่งวังหลวง",
+  "sub": "THE PALACE BLOOM",
+  "synopsis": "ท่ามกลางศึกชิงบัลลังก์และแผนลอบสังหารในราชสำนัก หมอยาหญิงผู้ซ่อนพิษไว้ในกลีบดอกไม้ต้องใช้ไหวพริบพลิกชะตากรรมของตนเองและองค์รัชทายาท",
+  "author": "MEI LIN ART",
+  "origin": "china",
+  "status": "ongoing",
+  "genres": [
+    "romance",
+    "historical",
+    "drama"
+  ],
+  "rating": 4.8,
+  "views": "12.1M อ่าน",
+  "followers": "295K ติดตาม",
+  "badge": "ใหม่",
+  "updateDay": "พุธ",
+  "tone": "from-rose-300 to-red-950",
+  "latestChapter": 3,
+  "episodes": [
+    {
+      "dir": "ep-01",
+      "number": 1,
+      "title": "โคมดอกบัวและถ้วยยาพิษ",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-02",
+      "number": 2,
+      "title": "กลลวงในสวนเหมย",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-03",
+      "number": 3,
+      "title": "สัญญาใต้ต้นหลิว",
+      "coinPrice": 5
+    }
+  ]
+}

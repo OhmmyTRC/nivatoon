@@ -1,0 +1,396 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model (NIVATOON - Cloud Firestore Standard Edition)
+// ===============================================================
+//
+// Collection: users/{userId}
+//   - id: string (required, matches userId, immutable)
+//   - email: string (required, valid email <= 120 chars, immutable on self-update)
+//   - displayName: string (required, 1..60 chars)
+//   - avatarUrl: string | null (optional <= 500 chars)
+//   - avatarFrame: string (required, in ['emerald','gold','neon','rose','royal'])
+//   - bio: string (required, <= 240 chars)
+//   - bannerTheme: string (required, in ['midnight','emerald','amber','rose','cyber'])
+//   - role: string (required, in ['user','creator','admin'], server/admin-only update)
+//   - creatorStatus: string (required, in ['none','pending','approved','rejected'], server/admin-only update)
+//   - coinBalance: number (required, >= 0, server/admin-only update)
+//   - freePassTickets: number (required, >= 0, server/admin-only update)
+//   - plan: string (required, in ['free','plus'], server/admin-only update)
+//   - streakDays: number (required, >= 0, server/admin-only update)
+//   - createdAt: string (required, <= 40 chars, immutable)
+//   - updatedAt / syncedAt: string (optional, <= 40 chars)
+//
+// Collection: users_public/{userId} (no PII, non-sensitive badge/avatar mirror)
+// Collection: creator_requests/{requestId}
+// Collection: wallet_transactions/{txId} (server-write only)
+// Collection: comments/{commentId}
+// Collection: series_stats/{seriesSlug} (server/admin write only)
+// Collection: library_items/{itemId}
+// Collection: unlocked_chapters/{unlockId} (server write only)
+// Collection: reading_history/{historyId}
+// Collection: series/{slug}
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function userDocPath(uid) {
+      return /databases/$(database)/documents/users/$(uid);
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        exists(userDocPath(request.auth.uid)) &&
+        get(userDocPath(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isCreatorOrAdmin() {
+      return isAuthenticated() &&
+        exists(userDocPath(request.auth.uid)) &&
+        get(userDocPath(request.auth.uid)).data.role in ['creator', 'admin'];
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function areImmutableFieldsUnchanged(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    function validStringLength(field, minLen, maxLen) {
+      return request.resource.data[field] is string &&
+        request.resource.data[field].size() >= minLen &&
+        request.resource.data[field].size() <= maxLen;
+    }
+
+    function isValidOptionalNullableString(field, maxLen) {
+      return !(field in request.resource.data) ||
+        request.resource.data[field] == null ||
+        (request.resource.data[field] is string && request.resource.data[field].size() <= maxLen);
+    }
+
+    function isValidEmail(email) {
+      return email is string &&
+        email.size() <= 120 &&
+        email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isNonNegNumber(val) {
+      return val is number && val >= 0;
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidUserFields(data) {
+      return hasOnlyAllowedFields([
+          'id', 'email', 'displayName', 'avatarUrl', 'avatarFrame', 'bio',
+          'bannerTheme', 'role', 'creatorStatus', 'coinBalance', 'freePassTickets',
+          'plan', 'streakDays', 'createdAt', 'updatedAt', 'syncedAt'
+        ]) &&
+        hasRequiredFields([
+          'id', 'email', 'displayName', 'role', 'creatorStatus',
+          'coinBalance', 'freePassTickets', 'plan', 'createdAt'
+        ]) &&
+        validStringLength('id', 1, 80) &&
+        isValidEmail(data.email) &&
+        validStringLength('displayName', 1, 60) &&
+        isValidOptionalNullableString('avatarUrl', 500) &&
+        (!( 'avatarFrame' in data ) || data.avatarFrame in ['emerald', 'gold', 'neon', 'rose', 'royal']) &&
+        isValidOptionalNullableString('bio', 240) &&
+        (!( 'bannerTheme' in data ) || data.bannerTheme in ['midnight', 'emerald', 'amber', 'rose', 'cyber']) &&
+        data.role in ['user', 'creator', 'admin'] &&
+        data.creatorStatus in ['none', 'pending', 'approved', 'rejected'] &&
+        isNonNegNumber(data.coinBalance) &&
+        isNonNegNumber(data.freePassTickets) &&
+        data.plan in ['free', 'plus'] &&
+        (!( 'streakDays' in data ) || isNonNegNumber(data.streakDays)) &&
+        validStringLength('createdAt', 10, 40) &&
+        isValidOptionalNullableString('updatedAt', 40) &&
+        isValidOptionalNullableString('syncedAt', 40);
+    }
+
+    function isValidPublicUser(data) {
+      return hasOnlyAllowedFields([
+          'id', 'displayName', 'avatarUrl', 'avatarFrame', 'bio', 'bannerTheme', 'role', 'updatedAt'
+        ]) &&
+        hasRequiredFields(['id', 'displayName', 'role']) &&
+        validStringLength('id', 1, 80) &&
+        validStringLength('displayName', 1, 60) &&
+        isValidOptionalNullableString('avatarUrl', 500) &&
+        (!( 'avatarFrame' in data ) || data.avatarFrame in ['emerald', 'gold', 'neon', 'rose', 'royal']) &&
+        isValidOptionalNullableString('bio', 240) &&
+        (!( 'bannerTheme' in data ) || data.bannerTheme in ['midnight', 'emerald', 'amber', 'rose', 'cyber']) &&
+        data.role in ['user', 'creator', 'admin'] &&
+        isValidOptionalNullableString('updatedAt', 40);
+    }
+
+    function isValidCreatorRequest(data) {
+      return hasOnlyAllowedFields([
+          'id', 'userId', 'email', 'displayName', 'penName', 'sampleTitle',
+          'portfolioNote', 'status', 'reviewedBy', 'reviewNote', 'createdAt', 'updatedAt', 'syncedAt'
+        ]) &&
+        hasRequiredFields(['id', 'userId', 'penName', 'sampleTitle', 'status', 'createdAt']) &&
+        validStringLength('id', 1, 80) &&
+        validStringLength('userId', 1, 80) &&
+        (!( 'email' in data ) || isValidEmail(data.email)) &&
+        isValidOptionalNullableString('displayName', 60) &&
+        validStringLength('penName', 1, 60) &&
+        validStringLength('sampleTitle', 1, 120) &&
+        isValidOptionalNullableString('portfolioNote', 500) &&
+        data.status in ['pending', 'approved', 'rejected'] &&
+        isValidOptionalNullableString('reviewedBy', 80) &&
+        isValidOptionalNullableString('reviewNote', 300) &&
+        validStringLength('createdAt', 10, 40) &&
+        isValidOptionalNullableString('updatedAt', 40) &&
+        isValidOptionalNullableString('syncedAt', 40);
+    }
+
+    function isValidComment(data) {
+      return hasOnlyAllowedFields([
+          'id', 'user_id', 'series_slug', 'chapter_number', 'author_name',
+          'author_avatar', 'author_badge', 'body', 'likes', 'is_top', 'is_spoiler',
+          'created_at', 'syncedAt'
+        ]) &&
+        hasRequiredFields([
+          'id', 'user_id', 'series_slug', 'chapter_number', 'author_name',
+          'author_badge', 'body', 'likes', 'is_top', 'is_spoiler', 'created_at'
+        ]) &&
+        validStringLength('id', 1, 80) &&
+        validStringLength('user_id', 1, 80) &&
+        validStringLength('series_slug', 1, 120) &&
+        data.chapter_number is number && data.chapter_number >= 1 &&
+        validStringLength('author_name', 1, 60) &&
+        isValidOptionalNullableString('author_avatar', 500) &&
+        data.author_badge in ['MEMBER', 'PLUS', 'CREATOR', 'ADMIN', 'GUEST'] &&
+        validStringLength('body', 1, 1000) &&
+        isNonNegNumber(data.likes) &&
+        data.is_top in [0, 1] &&
+        data.is_spoiler in [0, 1] &&
+        validStringLength('created_at', 10, 40) &&
+        isValidOptionalNullableString('syncedAt', 40);
+    }
+
+    function isValidLibraryItem(data) {
+      return hasOnlyAllowedFields(['user_id', 'series_slug', 'notifications', 'syncedAt']) &&
+        hasRequiredFields(['user_id', 'series_slug', 'notifications']) &&
+        validStringLength('user_id', 1, 80) &&
+        validStringLength('series_slug', 1, 120) &&
+        data.notifications in [0, 1] &&
+        isValidOptionalNullableString('syncedAt', 40);
+    }
+
+    function isValidReadingHistory(data) {
+      return hasOnlyAllowedFields(['user_id', 'series_slug', 'chapter_number', 'percent', 'page', 'updated_at', 'syncedAt']) &&
+        hasRequiredFields(['user_id', 'series_slug', 'chapter_number', 'percent', 'page', 'updated_at']) &&
+        validStringLength('user_id', 1, 80) &&
+        validStringLength('series_slug', 1, 120) &&
+        data.chapter_number is number && data.chapter_number >= 1 &&
+        data.percent is number && data.percent >= 0 && data.percent <= 100 &&
+        data.page is number && data.page >= 1 &&
+        validStringLength('updated_at', 10, 40) &&
+        isValidOptionalNullableString('syncedAt', 40);
+    }
+
+    function isValidGenreList(genres) {
+      return genres is list &&
+        genres.size() <= 5 &&
+        (genres.size() < 1 || (genres[0] is string && genres[0].size() <= 32)) &&
+        (genres.size() < 2 || (genres[1] is string && genres[1].size() <= 32)) &&
+        (genres.size() < 3 || (genres[2] is string && genres[2].size() <= 32)) &&
+        (genres.size() < 4 || (genres[3] is string && genres[3].size() <= 32)) &&
+        (genres.size() < 5 || (genres[4] is string && genres[4].size() <= 32));
+    }
+
+    function isValidSeriesDoc(data) {
+      return hasOnlyAllowedFields([
+          'slug', 'folder', 'title', 'sub', 'author', 'authorId', 'origin',
+          'status', 'genres', 'synopsis', 'updateDay', 'cover', 'episodesCount',
+          'updatedAt', 'syncedAt'
+        ]) &&
+        hasRequiredFields(['slug', 'title', 'author', 'origin', 'status']) &&
+        validStringLength('slug', 1, 120) &&
+        isValidOptionalNullableString('folder', 120) &&
+        validStringLength('title', 1, 120) &&
+        isValidOptionalNullableString('sub', 160) &&
+        validStringLength('author', 1, 80) &&
+        isValidOptionalNullableString('authorId', 80) &&
+        data.origin in ['korea', 'china', 'japan'] &&
+        data.status in ['ongoing', 'completed', 'hiatus'] &&
+        (!( 'genres' in data ) || isValidGenreList(data.genres)) &&
+        isValidOptionalNullableString('synopsis', 1500) &&
+        isValidOptionalNullableString('updateDay', 30) &&
+        isValidOptionalNullableString('cover', 500) &&
+        (!( 'episodesCount' in data ) || isNonNegNumber(data.episodesCount)) &&
+        isValidOptionalNullableString('updatedAt', 40) &&
+        isValidOptionalNullableString('syncedAt', 40);
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    // Private user profiles (email, wallet balance, role) - strict owner/admin only
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isValidUserFields(request.resource.data) && (
+        (
+          isOwner(userId) &&
+          request.resource.data.id == userId &&
+          request.resource.data.role == 'user' &&
+          request.resource.data.creatorStatus == 'none' &&
+          request.resource.data.coinBalance <= 240 &&
+          request.resource.data.plan == 'free'
+        ) || isAdmin()
+      );
+      allow update: if isValidUserFields(request.resource.data) && (
+        (
+          isOwner(userId) &&
+          areImmutableFieldsUnchanged([
+            'id', 'email', 'role', 'creatorStatus',
+            'coinBalance', 'freePassTickets', 'plan', 'streakDays', 'createdAt'
+          ])
+        ) || isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Public non-PII profile projections for author/comment cards
+    match /users_public/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isValidPublicUser(request.resource.data) && (
+        (isOwner(userId) && request.resource.data.id == userId && request.resource.data.role == 'user') ||
+        isAdmin()
+      );
+      allow update: if isValidPublicUser(request.resource.data) && (
+        (isOwner(userId) && areImmutableFieldsUnchanged(['id', 'role'])) ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Creator privilege applications (requester read/create, admin approve/reject)
+    match /creator_requests/{requestId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() &&
+        isValidCreatorRequest(request.resource.data) &&
+        request.resource.data.id == requestId &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.status == 'pending' &&
+        !('reviewedBy' in request.resource.data);
+      allow update: if isAdmin() &&
+        isValidCreatorRequest(request.resource.data) &&
+        areImmutableFieldsUnchanged(['id', 'userId', 'email', 'createdAt']) &&
+        resource.data.status == 'pending' &&
+        request.resource.data.status in ['approved', 'rejected'];
+      allow delete: if isAdmin();
+    }
+
+    // PromptPay / TrueMoney topups & coin spend ledger - strictly server Admin SDK write
+    match /wallet_transactions/{txId} {
+      allow read: if isAuthenticated() && (resource.data.user_id == request.auth.uid || isAdmin());
+      allow write: if false;
+    }
+
+    // Episode comments with spoiler moderation & anti-badge-spoofing
+    match /comments/{commentId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() &&
+        isValidComment(request.resource.data) &&
+        request.resource.data.id == commentId &&
+        request.resource.data.user_id == request.auth.uid &&
+        request.resource.data.author_badge in ['MEMBER', 'PLUS'] &&
+        request.resource.data.likes <= 1 &&
+        request.resource.data.is_top == 0;
+      allow update: if isAuthenticated() && isValidComment(request.resource.data) && (
+        (
+          resource.data.user_id == request.auth.uid &&
+          areImmutableFieldsUnchanged([
+            'id', 'user_id', 'series_slug', 'chapter_number', 'author_name',
+            'author_avatar', 'author_badge', 'likes', 'is_top', 'is_spoiler', 'created_at'
+          ])
+        ) || isAdmin()
+      );
+      allow delete: if isAuthenticated() && (resource.data.user_id == request.auth.uid || isAdmin());
+    }
+
+    // Aggregate per-series analytics (views/likes/rating) - server/admin writes only
+    match /series_stats/{seriesSlug} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // User bookmarks / library subscriptions
+    match /library_items/{itemId} {
+      allow read: if isAuthenticated() && (resource.data.user_id == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() &&
+        isValidLibraryItem(request.resource.data) &&
+        request.resource.data.user_id == request.auth.uid &&
+        itemId == request.auth.uid + '_' + request.resource.data.series_slug;
+      allow update: if isAuthenticated() &&
+        isValidLibraryItem(request.resource.data) &&
+        resource.data.user_id == request.auth.uid &&
+        areImmutableFieldsUnchanged(['user_id', 'series_slug']);
+      allow delete: if isAuthenticated() && (resource.data.user_id == request.auth.uid || isAdmin());
+    }
+
+    // Paid chapter unlocks ledger - strictly server Admin SDK write
+    match /unlocked_chapters/{unlockId} {
+      allow read: if isAuthenticated() && (resource.data.user_id == request.auth.uid || isAdmin());
+      allow write: if false;
+    }
+
+    // Per-user reading progress
+    match /reading_history/{historyId} {
+      allow read: if isAuthenticated() && (resource.data.user_id == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() &&
+        isValidReadingHistory(request.resource.data) &&
+        request.resource.data.user_id == request.auth.uid &&
+        historyId == request.auth.uid + '_' + request.resource.data.series_slug;
+      allow update: if isAuthenticated() &&
+        isValidReadingHistory(request.resource.data) &&
+        resource.data.user_id == request.auth.uid &&
+        areImmutableFieldsUnchanged(['user_id', 'series_slug']);
+      allow delete: if isAuthenticated() && (resource.data.user_id == request.auth.uid || isAdmin());
+    }
+
+    // Creator-published series metadata
+    match /series/{slug} {
+      allow read: if isAuthenticated();
+      allow create: if isCreatorOrAdmin() &&
+        isValidSeriesDoc(request.resource.data) &&
+        request.resource.data.slug == slug &&
+        (!( 'authorId' in request.resource.data ) || request.resource.data.authorId == request.auth.uid || isAdmin());
+      allow update: if isCreatorOrAdmin() &&
+        isValidSeriesDoc(request.resource.data) &&
+        areImmutableFieldsUnchanged(['slug', 'authorId']) &&
+        (resource.data.authorId == request.auth.uid || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

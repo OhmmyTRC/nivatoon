@@ -1,0 +1,42 @@
+{
+  "slug": "reborn-as-demon",
+  "folder": "04-reborn-as-demon",
+  "title": "เมื่อฉันเกิดใหม่เป็นจอมมาร",
+  "sub": "REBORN AS DEMON",
+  "synopsis": "ผู้กล้าที่สละชีวิตปราบจอมมารสำเร็จ กลับลืมตาตื่นขึ้นมาในร่างของจอมมารรุ่นถัดไป พร้อมลูกน้องปีศาจสุดเพี้ยนที่พยายามให้เขายึดครองโลกอีกครั้ง",
+  "author": "TAKAHASHI REN",
+  "origin": "japan",
+  "status": "completed",
+  "genres": [
+    "fantasy",
+    "comedy",
+    "action"
+  ],
+  "rating": 4.7,
+  "views": "9.8M อ่าน",
+  "followers": "210K ติดตาม",
+  "badge": "จบแล้ว",
+  "updateDay": "อาทิตย์",
+  "tone": "from-violet-300 to-indigo-950",
+  "latestChapter": 3,
+  "episodes": [
+    {
+      "dir": "ep-01",
+      "number": 1,
+      "title": "ตื่นมาก็ได้บัลลังก์ (และหนี้สินปราสาท)",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-02",
+      "number": 2,
+      "title": "ผู้กล้ารุ่นน้องบุกปราสาท!",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-03",
+      "number": 3,
+      "title": "ตอนจบสุดป่วน: สนธิสัญญาขนมหวาน",
+      "coinPrice": 0
+    }
+  ]
+}

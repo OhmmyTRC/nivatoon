@@ -1,0 +1,26 @@
+{
+  "name": "NIVATOON — อ่านมังฮวา มังงะ และเว็บตูน",
+  "short_name": "NIVATOON",
+  "description": "แพลตฟอร์มอ่านมังฮวา มังงะ และมันฮัว พร้อมผู้ช่วยอ่าน Gemini AI และชุมชนครีเอเตอร์",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#00dc64",
+  "lang": "th",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

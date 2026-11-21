@@ -1,0 +1,26 @@
+{
+  "slug": "ฟกปฟไกปฟ",
+  "folder": "ฟกปฟไกปฟ",
+  "title": "ฟกปฟกป",
+  "sub": "ฟกปฟไกปฟ",
+  "synopsis": "ฟกปกป",
+  "author": "HANA STUDIO (ครีเอเตอร์)",
+  "origin": "japan",
+  "status": "ongoing",
+  "genres": [
+    "action",
+    "fantasy"
+  ],
+  "rating": 4.9,
+  "badge": "ใหม่",
+  "updateDay": "เสาร์",
+  "tone": "from-emerald-300 to-slate-900",
+  "episodes": [
+    {
+      "dir": "ep-01",
+      "number": 1,
+      "title": "ไกปฟปไกฟปก",
+      "coinPrice": 0
+    }
+  ]
+}

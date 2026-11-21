@@ -1,0 +1,41 @@
+{
+  "slug": "neon-shinjuku-99",
+  "folder": "09-neon-shinjuku-99",
+  "title": "ชินจูกุ 99: หน่วยล่าวิญญาณไซเบอร์",
+  "sub": "NEON SHINJUKU 99",
+  "synopsis": "โตเกียวปี 2099 เมื่อวิญญาณอาฆาตซิงก์เข้ากับเครือข่ายโฮโลแกรม นักสืบไซเบอร์หน่วย 99 ต้องใช้กระสุนอาคมปิดคดีเหนือธรรมชาติกลางตรอกนีออนชินจูกุ",
+  "author": "KURODA KEN",
+  "origin": "japan",
+  "status": "ongoing",
+  "genres": [
+    "action",
+    "drama"
+  ],
+  "rating": 4.9,
+  "views": "13.4M อ่าน",
+  "followers": "288K ติดตาม",
+  "badge": "ใหม่",
+  "updateDay": "พฤหัสบดี",
+  "tone": "from-cyan-400 to-fuchsia-950",
+  "latestChapter": 3,
+  "episodes": [
+    {
+      "dir": "ep-01",
+      "number": 1,
+      "title": "ผีไซเบอร์ในป้ายไฟนีออน (RAW JP + TH Demo)",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-02",
+      "number": 2,
+      "title": "หน้ากากจิ้งจอกบนดาดฟ้าคาบุกิโจ",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-03",
+      "number": 3,
+      "title": "คลื่นเสียงต้องห้าม",
+      "coinPrice": 5
+    }
+  ]
+}

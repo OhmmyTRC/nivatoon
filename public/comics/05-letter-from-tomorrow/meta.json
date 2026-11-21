@@ -1,0 +1,41 @@
+{
+  "slug": "letter-from-tomorrow",
+  "folder": "05-letter-from-tomorrow",
+  "title": "จดหมายรักจากอนาคต",
+  "sub": "LETTER FROM TOMORROW",
+  "synopsis": "ตู้ไปรษณีย์เก่าริมสถานีรถไฟส่งจดหมายที่ลงวันที่ในอีก 10 ปีข้างหน้ามาถึงมือเธอ เพื่อเตือนไม่ให้เธอปล่อยมือจากคนสำคัญในฤดูฝนปีนี้",
+  "author": "AOI SORA",
+  "origin": "japan",
+  "status": "completed",
+  "genres": [
+    "romance",
+    "drama"
+  ],
+  "rating": 4.8,
+  "views": "11.3M อ่าน",
+  "followers": "340K ติดตาม",
+  "badge": "จบแล้ว",
+  "updateDay": "พฤหัสบดี",
+  "tone": "from-sky-200 to-cyan-950",
+  "latestChapter": 3,
+  "episodes": [
+    {
+      "dir": "ep-01",
+      "number": 1,
+      "title": "ชานชาลาที่ 1 ในวันฝนพรำ (RAW JP + TH Demo)",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-02",
+      "number": 2,
+      "title": "ร่มคันเดียวกับคำพูดที่ค้างคา",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-03",
+      "number": 3,
+      "title": "สิบปีให้หลัง ณ สถานีเดิม",
+      "coinPrice": 0
+    }
+  ]
+}

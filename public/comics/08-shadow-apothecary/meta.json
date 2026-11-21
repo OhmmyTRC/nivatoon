@@ -1,0 +1,42 @@
+{
+  "slug": "shadow-apothecary",
+  "folder": "08-shadow-apothecary",
+  "title": "ปรมาจารย์โอสถเงา",
+  "sub": "SHADOW APOTHECARY",
+  "synopsis": "จอมยุทธ์ผู้ถูกทำลายเส้นชีพจรกลับชาติมาเกิดในร่างหมอยาลึกลับบนยอดเขาไผ่ ใช้เตาหลอมสำริดปรุงโอสถเทวะและพิษเงาเพื่อทวงคืนยุทธภพ",
+  "author": "YUN ZHI STUDIO",
+  "origin": "china",
+  "status": "ongoing",
+  "genres": [
+    "action",
+    "historical",
+    "fantasy"
+  ],
+  "rating": 4.8,
+  "views": "16.9M อ่าน",
+  "followers": "360K ติดตาม",
+  "badge": "HOT",
+  "updateDay": "อังคาร",
+  "tone": "from-teal-300 to-emerald-950",
+  "latestChapter": 3,
+  "episodes": [
+    {
+      "dir": "ep-01",
+      "number": 1,
+      "title": "เตาหลอมสำริดและควันหยกทมิฬ",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-02",
+      "number": 2,
+      "title": "พรรคโลหิตบุกหุบเขาไผ่",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-03",
+      "number": 3,
+      "title": "งานประลองโอสถแห่งเมืองหลวง",
+      "coinPrice": 5
+    }
+  ]
+}

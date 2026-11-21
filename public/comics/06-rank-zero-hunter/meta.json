@@ -1,0 +1,41 @@
+{
+  "slug": "rank-zero-hunter",
+  "folder": "06-rank-zero-hunter",
+  "title": "นักล่าแรงก์ศูนย์",
+  "sub": "RANK ZERO HUNTER",
+  "synopsis": "ในโลกที่ฮันเตอร์ถูกวัดค่าด้วยแรงก์ A ถึง F เขาคือคนเดียวที่เครื่องวัดแสดงผลเป็น “แรงก์ 0” ซึ่งซ่อนพลังดูดกลืนมอนสเตอร์ระดับภัยพิบัติไว้",
+  "author": "STUDIOAPEX",
+  "origin": "korea",
+  "status": "ongoing",
+  "genres": [
+    "action",
+    "fantasy"
+  ],
+  "rating": 4.7,
+  "views": "15.6M อ่าน",
+  "followers": "318K ติดตาม",
+  "badge": "HOT",
+  "updateDay": "อาทิตย์",
+  "tone": "from-lime-300 to-green-950",
+  "latestChapter": 3,
+  "episodes": [
+    {
+      "dir": "ep-01",
+      "number": 1,
+      "title": "ตัวเลข 0 ที่ทุกคนหัวเราะเยาะ",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-02",
+      "number": 2,
+      "title": "การประมูลหอคอยทมิฬ",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-03",
+      "number": 3,
+      "title": "ความลับของแรงก์ศูนย์",
+      "coinPrice": 5
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+# Dependencies & build output
+node_modules/
+.next/
+out/
+tsconfig.tsbuildinfo
+
+# Local secrets & environment variables (NEVER commit!)
+.env
+.env.local
+.env.*.local
+.env.production*
+
+# Firebase CLI cache & private Admin SDK keys
+.firebase/
+*firebase-adminsdk*.json
+serviceAccountKey.json
+
+# Local SQLite database & runtime uploads
+data/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite*
+public/uploads/
+
+# OS junk
+.DS_Store
+Thumbs.db

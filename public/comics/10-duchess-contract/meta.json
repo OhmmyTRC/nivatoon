@@ -1,0 +1,42 @@
+{
+  "slug": "duchess-contract",
+  "folder": "10-duchess-contract",
+  "title": "สัญญาลับดัชเชสสายโหด",
+  "sub": "THE DUCHESS'S CONTRACT",
+  "synopsis": "เมื่อนักดาบหญิงอันดับหนึ่งทะลุมิติเข้ามาในร่างดัชเชสผู้อ่อนแอที่กำลังจะถูกสามีหย่า เธอจึงฉีกสัญญาเดิมทิ้งแล้วท้าดวลทุกคนในราชสำนักด้วยดาบเรเปียร์!",
+  "author": "ROSÉ & CROWN",
+  "origin": "korea",
+  "status": "ongoing",
+  "genres": [
+    "romance",
+    "fantasy",
+    "drama"
+  ],
+  "rating": 4.9,
+  "views": "21.5M อ่าน",
+  "followers": "460K ติดตาม",
+  "badge": "TOP 2",
+  "updateDay": "ศุกร์",
+  "tone": "from-pink-300 to-purple-950",
+  "latestChapter": 3,
+  "episodes": [
+    {
+      "dir": "ep-01",
+      "number": 1,
+      "title": "ฉีกใบหย่าด้วยปลายดาบ!",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-02",
+      "number": 2,
+      "title": "งานเลี้ยงน้ำชาที่ร้อนแรงเกินคาด",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-03",
+      "number": 3,
+      "title": "ข้อตกลงใหม่ของหัวใจ",
+      "coinPrice": 5
+    }
+  ]
+}

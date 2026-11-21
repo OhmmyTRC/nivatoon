@@ -1,0 +1,42 @@
+{
+  "slug": "eclipse-academy",
+  "folder": "07-eclipse-academy",
+  "title": "โรงเรียนมหาเวทสุริยคราส",
+  "sub": "ECLIPSE ACADEMY",
+  "synopsis": "สถาบันเวทมนตร์ลอยฟ้าที่แบ่งขั้วระหว่างสายสุริยันและสายจันทรา เด็กหนุ่มไฟสุริยันและเด็กสาวเวทคราสต้องจับคู่สอบผ่านบททดสอบมรณะเพื่อหยุดยั้งคำสาปพันปี",
+  "author": "SOLAR & LUNA",
+  "origin": "korea",
+  "status": "ongoing",
+  "genres": [
+    "fantasy",
+    "action",
+    "drama"
+  ],
+  "rating": 4.8,
+  "views": "14.2M อ่าน",
+  "followers": "305K ติดตาม",
+  "badge": "UP",
+  "updateDay": "จันทร์",
+  "tone": "from-indigo-400 to-rose-950",
+  "latestChapter": 3,
+  "episodes": [
+    {
+      "dir": "ep-01",
+      "number": 1,
+      "title": "พิธีปฐมนิเทศใต้เงาสุริยคราส",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-02",
+      "number": 2,
+      "title": "หอสมุดต้องห้ามชั้นใต้ดิน",
+      "coinPrice": 0
+    },
+    {
+      "dir": "ep-03",
+      "number": 3,
+      "title": "ศึกชิงธงระหว่างหอพัก",
+      "coinPrice": 5
+    }
+  ]
+}
