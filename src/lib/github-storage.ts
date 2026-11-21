@@ -330,7 +330,7 @@ export async function syncPublicFilesToGitHub(params: {
     let allOk = true
     let lastErr = ''
     for (const relPath of pathsToSync) {
-      const absPath = path.join(process.cwd(), relPath)
+      const absPath = path.join(/*turbopackIgnore: true*/ process.cwd(), relPath)
       if (!fs.existsSync(absPath) || !fs.statSync(absPath).isFile()) continue
       const buf = fs.readFileSync(absPath)
       const res = await uploadBufferToGitHubApi(relPath, buf, params.commitMessage)

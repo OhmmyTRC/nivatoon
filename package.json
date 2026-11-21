@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node -e \"const {spawn}=require('child_process'); const args=['./node_modules/next/dist/bin/next','dev','--port',process.env.PORT||'3000','--hostname',process.env.FIGMA_DEV_SERVER_HOST||'0.0.0.0']; spawn(process.execPath,args,{stdio:'inherit',env:{...process.env,NODE_OPTIONS:((process.env.NODE_OPTIONS||'')+' --no-deprecation').trim()}}).on('exit',c=>process.exit(c??0))\"",
     "build": "NODE_OPTIONS=\"${NODE_OPTIONS:-} --no-deprecation\" payload build",
+    "build:web": "next build",
     "start": "NODE_OPTIONS=\"${NODE_OPTIONS:-} --no-deprecation\" next start",
     "format": "oxfmt",
     "generate:importmap": "NODE_OPTIONS=\"${NODE_OPTIONS:-} --no-deprecation\" payload generate:importmap",

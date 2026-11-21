@@ -75,13 +75,13 @@ function readServiceAccountFromEnv(): ServiceAccount | null {
 
   // Fallback: detect Firebase Admin SDK key file in project root
   try {
-    const rootFiles = fs.readdirSync(process.cwd())
+    const rootFiles = fs.readdirSync(/*turbopackIgnore: true*/ process.cwd())
     const sdkFile = rootFiles.find(
       (f) => f === 'serviceAccountKey.json' || /firebase-adminsdk.*\.json$/i.test(f),
     )
     if (sdkFile) {
       const parsed = JSON.parse(
-        fs.readFileSync(path.join(process.cwd(), sdkFile), 'utf8'),
+        fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), sdkFile), 'utf8'),
       ) as ServiceAccount
       if (parsed.projectId || (parsed as Record<string, unknown>).project_id) {
         return parsed
