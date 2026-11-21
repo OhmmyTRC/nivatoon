@@ -408,8 +408,17 @@ export function Footer() {
             NIVATOON
           </div>
           <p className="mt-3 max-w-xs text-xs leading-6 text-zinc-500">
-            แพลตฟอร์มอ่านมังฮวา มังงะ และมันฮัวออนไลน์ พร้อมผู้ช่วยอ่านอัจฉริยะและชุมชนครีเอเตอร์
+            แพลตฟอร์มอ่านมังฮวา มังงะ และมันฮัวออนไลน์ ใช้ GitHub (OhmmyTRC/nivatoon) เป็นคลังเก็บไฟล์ภาพ และ Firebase (niva-421c2) เป็นฐานข้อมูลคลาวด์
           </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <a
+              href="/nivatoon-release.apk"
+              download="nivatoon-release.apk"
+              className="inline-flex items-center gap-1.5 rounded-full bg-zinc-950 px-4 py-2 text-xs font-black text-[#00dc64] shadow-sm hover:bg-zinc-800"
+            >
+              📱 ดาวน์โหลดแอป Android (.APK)
+            </a>
+          </div>
         </div>
         <div className="text-xs">
           <b className="text-zinc-950">สำรวจเรื่อง</b>

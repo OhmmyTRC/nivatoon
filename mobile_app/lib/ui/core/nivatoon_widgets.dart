@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:nivatoon_mobile/data/repositories/nivatoon_repository.dart';
+import 'package:nivatoon_mobile/data/services/cloud_storage_and_db_service.dart';
 import 'package:nivatoon_mobile/data/services/promptpay_service.dart';
 import 'package:nivatoon_mobile/domain/models/nivatoon_models.dart';
 
-/// Renders either a bundled asset image (`assets/...`) or a local gallery file (`File`).
+/// Renders images from GitHub Raw Storage (`https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/...`),
+/// bundled assets (`assets/...`), or local gallery files (`File`).
 class AdaptiveComicImage extends StatelessWidget {
   const AdaptiveComicImage({
     super.key,
@@ -15,6 +17,7 @@ class AdaptiveComicImage extends StatelessWidget {
     this.height,
     this.fit = BoxFit.cover,
     this.borderRadius = 0,
+    this.fallbackAsset,
   });
 
   final String path;
@@ -22,25 +25,58 @@ class AdaptiveComicImage extends StatelessWidget {
   final double? height;
   final BoxFit fit;
   final double borderRadius;
+  final String? fallbackAsset;
 
   @override
   Widget build(BuildContext context) {
-    final isAsset = path.startsWith('assets/');
-    final Widget img = isAsset
-        ? Image.asset(
-            path,
+    final resolved = CloudStorageAndDbService.toGitHubRawUrl(path);
+    final isNetwork =
+        resolved.startsWith('https://') || resolved.startsWith('http://');
+    final isAsset = resolved.startsWith('assets/');
+
+    final Widget img;
+    if (isNetwork) {
+      img = Image.network(
+        resolved,
+        width: width,
+        height: height,
+        fit: fit,
+        loadingBuilder: (BuildContext ctx, Widget child, ImageChunkEvent? p) {
+          if (p == null) return child;
+          return Container(
             width: width,
-            height: height,
-            fit: fit,
-            errorBuilder: (_, _, _) => _placeholder(),
-          )
-        : Image.file(
-            File(path),
-            width: width,
-            height: height,
-            fit: fit,
-            errorBuilder: (_, _, _) => _placeholder(),
+            height: height ?? 180,
+            color: const Color(0xFF18181B),
+            alignment: Alignment.center,
+            child: const SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2.4,
+                color: Color(0xFF00DC64),
+              ),
+            ),
           );
+        },
+        errorBuilder: (_, _, _) => _fallbackOrPlaceholder(),
+      );
+    } else if (isAsset) {
+      img = Image.asset(
+        resolved,
+        width: width,
+        height: height,
+        fit: fit,
+        errorBuilder: (_, _, _) => _placeholder(),
+      );
+    } else {
+      img = Image.file(
+        File(resolved),
+        width: width,
+        height: height,
+        fit: fit,
+        errorBuilder: (_, _, _) => _fallbackOrPlaceholder(),
+      );
+    }
 
     if (borderRadius <= 0) return img;
     return ClipRRect(
@@ -49,10 +85,23 @@ class AdaptiveComicImage extends StatelessWidget {
     );
   }
 
+  Widget _fallbackOrPlaceholder() {
+    if (fallbackAsset != null && fallbackAsset!.startsWith('assets/')) {
+      return Image.asset(
+        fallbackAsset!,
+        width: width,
+        height: height,
+        fit: fit,
+        errorBuilder: (_, _, _) => _placeholder(),
+      );
+    }
+    return _placeholder();
+  }
+
   Widget _placeholder() {
     return Container(
       width: width,
-      height: height,
+      height: height ?? 160,
       color: const Color(0xFF18181B),
       alignment: Alignment.center,
       child: const Icon(Icons.menu_book_rounded, color: Color(0xFF00DC64)),

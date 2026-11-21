@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import sharp from 'sharp'
 import { NextResponse } from 'next/server'
+import { addSystemLog } from '@/lib/app-db'
 import { getServerSession } from '@/lib/auth'
 import {
   getComicsRootDir,
@@ -9,7 +10,13 @@ import {
   scanComicsDirectory,
   writeSeriesMetadata,
 } from '@/lib/comics-fs'
-import { syncDocToFirebase } from '@/lib/firebase-db'
+import { deleteDocFromFirebase, syncDocToFirebase, syncFullDatabaseToFirebase } from '@/lib/firebase-db'
+import {
+  generateAndSaveComicsManifest,
+  getGitHubStorageStatus,
+  syncPublicFilesToGitHub,
+  toGitHubRawUrl,
+} from '@/lib/github-storage'
 
 export async function GET() {
   const { user } = await getServerSession()
@@ -20,16 +27,19 @@ export async function GET() {
   return NextResponse.json({
     ok: true,
     count: series.length,
+    githubStorage: getGitHubStorageStatus(),
     series: series.map((s) => ({
       folder: s.folder,
       slug: s.slug,
       title: s.title,
       coverUrl: s.coverUrl,
+      githubCoverUrl: toGitHubRawUrl(s.coverUrl),
       episodes: s.episodes.map((e) => ({
         dir: e.dir,
         chapterNumber: e.chapterNumber,
         title: e.title,
         pageCount: e.pages.length,
+        githubPages: e.pages.map((p) => toGitHubRawUrl(p)),
       })),
     })),
   })
@@ -71,28 +81,35 @@ export async function POST(request: Request) {
     const epDir = path.join(seriesDir, safeEpDir)
     fs.mkdirSync(epDir, { recursive: true })
 
+    const syncedRepoPaths: string[] = []
+
     // Cover upload (optional)
     const coverFile = formData.get('cover')
     if (coverFile && coverFile instanceof File && coverFile.size > 0) {
       const buf = Buffer.from(await coverFile.arrayBuffer())
       const jpg = await sharp(buf).jpeg({ quality: 90 }).toBuffer()
       fs.writeFileSync(path.join(seriesDir, 'cover.jpg'), jpg)
+      syncedRepoPaths.push(`public/comics/${safeFolder}/cover.jpg`)
     }
 
-    // Episode pages upload (supports multi-file upload, converted cleanly to numbered 001.jpg, 002.jpg, ...)
+    // Episode pages upload (converted cleanly to numbered 001.jpg, 002.jpg, ...)
     const pageFiles = formData.getAll('pages').filter((f): f is File => f instanceof File && f.size > 0)
     const existingCount = fs
       .readdirSync(epDir)
       .filter((f) => /\.(jpe?g|png|webp)$/i.test(f)).length
 
     const savedPages: string[] = []
+    const githubSavedPages: string[] = []
     for (let i = 0; i < pageFiles.length; i++) {
       const file = pageFiles[i]
       const buf = Buffer.from(await file.arrayBuffer())
       const jpg = await sharp(buf).jpeg({ quality: 88 }).toBuffer()
       const filename = `${String(existingCount + i + 1).padStart(3, '0')}.jpg`
       fs.writeFileSync(path.join(epDir, filename), jpg)
-      savedPages.push(`/comics/${encodeURIComponent(safeFolder)}/${encodeURIComponent(safeEpDir)}/${filename}`)
+      const localUrl = `/comics/${encodeURIComponent(safeFolder)}/${encodeURIComponent(safeEpDir)}/${filename}`
+      savedPages.push(localUrl)
+      githubSavedPages.push(toGitHubRawUrl(localUrl) || localUrl)
+      syncedRepoPaths.push(`public/comics/${safeFolder}/${safeEpDir}/${filename}`)
     }
 
     // Update meta.json with episode entry
@@ -129,7 +146,16 @@ export async function POST(request: Request) {
         .filter(Boolean),
       episodesMeta: filteredEps,
     })
+    syncedRepoPaths.push(`public/comics/${safeFolder}/meta.json`)
 
+    // Regenerate GitHub manifest & push new files to GitHub repository
+    const githubSync = await syncPublicFilesToGitHub({
+      repoRelativePaths: syncedRepoPaths,
+      commitMessage: `feat(comics): upload ${safeFolder}/${safeEpDir} (${savedPages.length} pages) via NIVATOON Studio`,
+      regenerateManifest: true,
+    })
+
+    // Sync updated series & episodes to Firebase Database (Firestore + RTDB)
     const seriesSlug = String(meta.slug || safeFolder)
     await syncDocToFirebase('series', seriesSlug, {
       slug: seriesSlug,
@@ -143,18 +169,49 @@ export async function POST(request: Request) {
       genres: Array.isArray(meta.genres) ? meta.genres : ['action'],
       synopsis: meta.synopsis || '',
       updateDay: meta.updateDay || updateDay,
+      cover: toGitHubRawUrl(`/comics/${safeFolder}/cover.jpg`),
       episodesCount: filteredEps.length,
       updatedAt: new Date().toISOString(),
     })
+    await syncFullDatabaseToFirebase()
+
+    addSystemLog(
+      'info',
+      'studio-upload',
+      `อัปโหลด ${safeFolder}/${safeEpDir} (${savedPages.length} หน้า) ไปยัง GitHub Storage (${githubSync.method}) และซิงก์ Firebase สำเร็จ`,
+      user.email,
+    )
 
     return NextResponse.json({
       ok: true,
       folder: safeFolder,
       episodeDir: safeEpDir,
       savedPages,
+      githubSavedPages,
+      githubSync,
       meta,
     })
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message || String(err) }, { status: 500 })
   }
+}
+
+export async function DELETE(request: Request) {
+  const { user } = await getServerSession()
+  if (!user || user.role !== 'admin') {
+    return NextResponse.json({ ok: false, error: 'Admin only' }, { status: 403 })
+  }
+  const folder = new URL(request.url).searchParams.get('folder') || ''
+  if (!folder) {
+    return NextResponse.json({ ok: false, error: 'Missing folder' }, { status: 400 })
+  }
+  const safeFolder = sanitizeFolderSegment(folder)
+  const targetDir = path.join(getComicsRootDir(), safeFolder)
+  if (fs.existsSync(targetDir)) {
+    fs.rmSync(targetDir, { recursive: true, force: true })
+  }
+  generateAndSaveComicsManifest()
+  await deleteDocFromFirebase('series', safeFolder)
+  await syncFullDatabaseToFirebase()
+  return NextResponse.json({ ok: true, deletedFolder: safeFolder })
 }

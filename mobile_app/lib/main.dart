@@ -6,10 +6,15 @@ import 'package:nivatoon_mobile/ui/features/shell/views/nivatoon_shell_view.dart
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const NivatoonApp());
+  runApp(
+    NivatoonApp(
+      repository: NivatoonRepository(autoCloudSync: true),
+    ),
+  );
 }
 
-/// Root widget for the NIVATOON Android application (Native Dart UI + Live Server Mode).
+/// Root widget for the NIVATOON Android application
+/// (GitHub File Storage `OhmmyTRC/nivatoon` + Firebase Cloud Database `niva-421c2`).
 class NivatoonApp extends StatefulWidget {
   const NivatoonApp({super.key, this.home, this.repository});
 

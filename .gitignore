@@ -15,13 +15,14 @@ tsconfig.tsbuildinfo
 *firebase-adminsdk*.json
 serviceAccountKey.json
 
-# Local SQLite database & runtime uploads
+# Local SQLite database & private payment slips (comics, creator-samples & avatars are stored in GitHub)
 /data/
 *.db
 *.db-wal
 *.db-shm
 *.sqlite*
-/public/uploads/
+/public/uploads/slips/
+/public/nivatoon-release.apk
 
 # Flutter build outputs & local caches
 mobile_app/build/

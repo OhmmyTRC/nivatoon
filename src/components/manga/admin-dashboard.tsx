@@ -54,8 +54,10 @@ export function AnalyticsDashboardPage({
   const [rulesMd, setRulesMd] = useState('')
   const [geminiApiKeyInput, setGeminiApiKeyInput] = useState('')
   const [smtpPassInput, setSmtpPassInput] = useState('')
+  const [githubTokenInput, setGithubTokenInput] = useState('')
   const [smtpTestEmail, setSmtpTestEmail] = useState('trcrayrai@gmail.com')
   const [testingSmtp, setTestingSmtp] = useState(false)
+  const [syncingCloud, setSyncingCloud] = useState(false)
   const [logFilter, setLogFilter] = useState('all')
 
   const loadAdminData = async () => {
@@ -200,6 +202,7 @@ export function AnalyticsDashboardPage({
         smtpUser: aiSettings.smtpUser,
         smtpFrom: aiSettings.smtpFrom,
         ...(smtpPassInput.trim() ? { smtpPass: smtpPassInput.trim() } : {}),
+        ...(githubTokenInput.trim() ? { githubToken: githubTokenInput.trim() } : {}),
         strictSlipCheck: aiSettings.strictSlipCheck,
       }),
     })
@@ -208,7 +211,8 @@ export function AnalyticsDashboardPage({
       setAiSettings(json.settings)
       setGeminiApiKeyInput('')
       setSmtpPassInput('')
-      setActionMsg(json.message || 'บันทึกการตั้งค่า AI / Email สำเร็จ')
+      setGithubTokenInput('')
+      setActionMsg(json.message || 'บันทึกการตั้งค่า AI / Email / GitHub สำเร็จ')
       await loadAdminData()
     } else {
       setActionError(json.error || 'บันทึกไม่สำเร็จ')
@@ -234,6 +238,31 @@ export function AnalyticsDashboardPage({
       await loadAdminData()
     } finally {
       setTestingSmtp(false)
+    }
+  }
+
+  const handleSyncCloudNow = async () => {
+    setActionMsg(null)
+    setActionError(null)
+    setSyncingCloud(true)
+    try {
+      const res = await fetch('/api/cloud/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pushToGitHub: true }),
+      })
+      const json = await res.json()
+      if (json.ok) {
+        const counts = json.firebaseSync?.counts || {}
+        setActionMsg(
+          `ซิงก์คลังไฟล์ GitHub (OhmmyTRC/nivatoon) และฐานข้อมูล Firebase (niva-421c2) สำเร็จ ✓ (${counts.series ?? 0} เรื่อง, ${counts.users ?? 0} ผู้ใช้, ${counts.transactions ?? 0} ธุรกรรม)`,
+        )
+        await loadAdminData()
+      } else {
+        setActionError(json.error || 'ซิงก์ข้อมูลคลาวด์ไม่สำเร็จ')
+      }
+    } finally {
+      setSyncingCloud(false)
     }
   }
 
@@ -288,15 +317,10 @@ export function AnalyticsDashboardPage({
                   <span className="rounded-full bg-zinc-950 px-3 py-1 text-[11px] font-black text-[#00dc64]">
                     ADMIN BACKOFFICE
                   </span>
-                  <span
-                    className={`rounded-full px-3 py-1 text-[11px] font-bold ${
-                      data?.firebaseStatus?.webConfigured
-                        ? 'bg-emerald-100 text-emerald-800'
-                        : 'bg-zinc-100 text-zinc-600'
-                    }`}
-                  >
-                    Firebase Web &amp; Analytics:{' '}
-                    {data?.firebaseStatus?.webConfigured ? 'เชื่อมต่อแล้ว' : 'ยังไม่ตั้งค่า'}
+                  <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-800">
+                    GitHub File Storage: {data?.githubStorage?.repository || 'OhmmyTRC/nivatoon'} (
+                    {data?.githubStorage?.seriesCount ?? 11} เรื่อง •{' '}
+                    {data?.githubStorage?.totalPages ?? 70} หน้า)
                   </span>
                   <span
                     className={`rounded-full px-3 py-1 text-[11px] font-bold ${
@@ -305,9 +329,24 @@ export function AnalyticsDashboardPage({
                         : 'bg-amber-100 text-amber-800'
                     }`}
                   >
-                    Firestore Admin Sync:{' '}
-                    {data?.firebaseConnected ? 'พร้อมซิงค์คลาวด์ ✓' : 'รอ Service Account Key'}
+                    Firebase DB (niva-421c2):{' '}
+                    {data?.firebaseConnected ? 'Firestore & RTDB ซิงก์คลาวด์ ✓' : 'รอ Service Account Key'}
                   </span>
+                  <button
+                    type="button"
+                    disabled={syncingCloud}
+                    onClick={() => void handleSyncCloudNow()}
+                    className="rounded-full bg-[#00dc64] px-3.5 py-1 text-[11px] font-black text-white shadow-sm hover:bg-[#00c75a] disabled:opacity-50"
+                  >
+                    {syncingCloud ? 'กำลังซิงก์ GitHub & Firebase...' : '☁️ ซิงก์ GitHub + Firebase ทันที'}
+                  </button>
+                  <a
+                    href="/nivatoon-release.apk"
+                    download="nivatoon-release.apk"
+                    className="rounded-full bg-zinc-950 px-3.5 py-1 text-[11px] font-black text-[#00dc64] shadow-sm hover:bg-zinc-800"
+                  >
+                    📱 ดาวน์โหลดแอป Android (.APK)
+                  </a>
                 </div>
                 <h1 className="mt-2 text-3xl font-black">ระบบจัดการหลังบ้าน NIVATOON</h1>
               </div>
@@ -839,6 +878,46 @@ export function AnalyticsDashboardPage({
                         className="rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-2 font-black text-zinc-900 hover:border-[#00dc64]"
                       >
                         {testingSmtp ? 'กำลังส่ง...' : 'ทดสอบส่งเมล SMTP'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-zinc-100 pt-3">
+                    <b className="text-xs">คลังเก็บไฟล์ GitHub (OhmmyTRC/nivatoon) &amp; ฐานข้อมูล Firebase (niva-421c2)</b>
+                    <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-[11px] leading-5 text-emerald-950">
+                      <div>
+                        <b>GitHub File Storage:</b>{' '}
+                        <span className="font-mono">
+                          https://raw.githubusercontent.com/{aiSettings.githubRepo || 'OhmmyTRC/nivatoon'}/main/public/comics/manifest.json
+                        </span>
+                      </div>
+                      <div>
+                        <b>Firebase Cloud Database:</b> Project <span className="font-mono">niva-421c2</span> (Cloud Firestore &amp; Realtime Database)
+                      </div>
+                      <div>
+                        <b>GitHub API Token:</b>{' '}
+                        {aiSettings.hasGithubToken ? `ตั้งค่าแล้ว (${aiSettings.maskedGithubToken})` : 'ใช้ Git CLI Push อัตโนมัติ (หรือใส่ Personal Access Token ด้านล่าง)'}
+                      </div>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                      <input
+                        type="password"
+                        value={githubTokenInput}
+                        onChange={(e) => setGithubTokenInput(e.target.value)}
+                        placeholder={
+                          aiSettings.hasGithubToken
+                            ? 'เปลี่ยน GitHub Personal Access Token (ghp_...)...'
+                            : 'ใส่ GitHub Personal Access Token (ghp_...) สำหรับอัปโหลดไฟล์ผ่าน API'
+                        }
+                        className="min-w-0 flex-1 rounded-xl border border-zinc-200 px-3 py-2"
+                      />
+                      <button
+                        type="button"
+                        disabled={syncingCloud}
+                        onClick={() => void handleSyncCloudNow()}
+                        className="rounded-xl bg-zinc-950 px-4 py-2 font-black text-[#00dc64] hover:bg-zinc-800 disabled:opacity-50"
+                      >
+                        {syncingCloud ? 'กำลังซิงก์...' : '☁️ ซิงก์ไฟล์ GitHub & Firebase'}
                       </button>
                     </div>
                   </div>

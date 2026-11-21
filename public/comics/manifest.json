@@ -1,0 +1,1016 @@
+{
+  "version": "2026-11-github-storage-v1",
+  "repository": "OhmmyTRC/nivatoon",
+  "branch": "main",
+  "rawBaseUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public",
+  "cdnBaseUrl": "https://cdn.jsdelivr.net/gh/OhmmyTRC/nivatoon@main/public",
+  "updatedAt": "2026-11-21T18:31:29.537Z",
+  "seriesCount": 11,
+  "totalEpisodes": 31,
+  "totalPages": 154,
+  "series": [
+    {
+      "id": "folder-01-moonlit-sword",
+      "slug": "moonlit-sword",
+      "folder": "01-moonlit-sword",
+      "title": "ดาบจันทราเหนือมหานคร",
+      "sub": "MOONLIT SWORD",
+      "synopsis": "มหานครที่ไม่มีใครเคยเห็นดวงจันทร์มานานร้อยปี จนกระทั่งคืนหนึ่ง “ยูนา” เด็กส่งของชั้นล่างสุดพบดาบโบราณที่ตอบสนองต่อแสงจันทร์ในความทรงจำของเธอ เธอจึงต้องเลือกระหว่างการแก้แค้นกับการปกป้องเมืองสุดท้าย",
+      "author": "HANA STUDIO",
+      "origin": "korea",
+      "status": "ongoing",
+      "genres": [
+        "fantasy",
+        "action"
+      ],
+      "rating": 4.9,
+      "views": "18.4M อ่าน",
+      "followers": "382K ติดตาม",
+      "tone": "from-emerald-300 to-slate-900",
+      "latestChapter": 3,
+      "badge": "HOT",
+      "updateDay": "ศุกร์",
+      "coverUrl": "/comics/01-moonlit-sword/cover.jpg",
+      "githubCoverUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/cover.jpg",
+      "episodes": [
+        {
+          "id": "moonlit-sword-ep-1",
+          "dir": "ep-01",
+          "chapterNumber": 1,
+          "title": "คืนที่แสงจันทร์กลับมา (RAW KR + TH Demo)",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/01-moonlit-sword/ep-01/001.jpg",
+            "/comics/01-moonlit-sword/ep-01/002.jpg",
+            "/comics/01-moonlit-sword/ep-01/003.jpg",
+            "/comics/01-moonlit-sword/ep-01/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-01/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-01/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-01/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-01/004.jpg"
+          ]
+        },
+        {
+          "id": "moonlit-sword-ep-2",
+          "dir": "ep-02",
+          "chapterNumber": 2,
+          "title": "เงาผู้พิทักษ์แห่งเขต 9",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/01-moonlit-sword/ep-02/001.jpg",
+            "/comics/01-moonlit-sword/ep-02/002.jpg",
+            "/comics/01-moonlit-sword/ep-02/003.jpg",
+            "/comics/01-moonlit-sword/ep-02/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-02/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-02/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-02/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-02/004.jpg"
+          ]
+        },
+        {
+          "id": "moonlit-sword-ep-3",
+          "dir": "ep-03",
+          "chapterNumber": 3,
+          "title": "คำสาบานใต้แสงสีเขียว",
+          "coinPrice": 5,
+          "isPreview": true,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/01-moonlit-sword/ep-03/001.jpg",
+            "/comics/01-moonlit-sword/ep-03/002.jpg",
+            "/comics/01-moonlit-sword/ep-03/003.jpg",
+            "/comics/01-moonlit-sword/ep-03/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-03/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-03/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-03/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-03/004.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "folder-02-palace-bloom",
+      "slug": "palace-bloom",
+      "folder": "02-palace-bloom",
+      "title": "บุปผาแห่งวังหลวง",
+      "sub": "THE PALACE BLOOM",
+      "synopsis": "ท่ามกลางศึกชิงบัลลังก์และแผนลอบสังหารในราชสำนัก หมอยาหญิงผู้ซ่อนพิษไว้ในกลีบดอกไม้ต้องใช้ไหวพริบพลิกชะตากรรมของตนเองและองค์รัชทายาท",
+      "author": "MEI LIN ART",
+      "origin": "china",
+      "status": "ongoing",
+      "genres": [
+        "romance",
+        "historical",
+        "drama"
+      ],
+      "rating": 4.8,
+      "views": "12.1M อ่าน",
+      "followers": "295K ติดตาม",
+      "tone": "from-rose-300 to-red-950",
+      "latestChapter": 3,
+      "badge": "ใหม่",
+      "updateDay": "พุธ",
+      "coverUrl": "/comics/02-palace-bloom/cover.jpg",
+      "githubCoverUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/cover.jpg",
+      "episodes": [
+        {
+          "id": "palace-bloom-ep-1",
+          "dir": "ep-01",
+          "chapterNumber": 1,
+          "title": "โคมดอกบัวและถ้วยยาพิษ",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/02-palace-bloom/ep-01/001.jpg",
+            "/comics/02-palace-bloom/ep-01/002.jpg",
+            "/comics/02-palace-bloom/ep-01/003.jpg",
+            "/comics/02-palace-bloom/ep-01/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-01/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-01/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-01/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-01/004.jpg"
+          ]
+        },
+        {
+          "id": "palace-bloom-ep-2",
+          "dir": "ep-02",
+          "chapterNumber": 2,
+          "title": "กลลวงในสวนเหมย",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/02-palace-bloom/ep-02/001.jpg",
+            "/comics/02-palace-bloom/ep-02/002.jpg",
+            "/comics/02-palace-bloom/ep-02/003.jpg",
+            "/comics/02-palace-bloom/ep-02/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-02/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-02/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-02/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-02/004.jpg"
+          ]
+        },
+        {
+          "id": "palace-bloom-ep-3",
+          "dir": "ep-03",
+          "chapterNumber": 3,
+          "title": "สัญญาใต้ต้นหลิว",
+          "coinPrice": 5,
+          "isPreview": true,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/02-palace-bloom/ep-03/001.jpg",
+            "/comics/02-palace-bloom/ep-03/002.jpg",
+            "/comics/02-palace-bloom/ep-03/003.jpg",
+            "/comics/02-palace-bloom/ep-03/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-03/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-03/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-03/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/02-palace-bloom/ep-03/004.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "folder-03-unrivaled-system",
+      "slug": "unrivaled-system",
+      "folder": "03-unrivaled-system",
+      "title": "ระบบเทพไร้พ่าย",
+      "sub": "UNRIVALED SYSTEM",
+      "synopsis": "เมื่อดันเจี้ยนระดับ S ปะทุขึ้นใจกลางกรุงโซล เด็กหนุ่มผู้ถูกทอดทิ้งกลับปลุกหน้าต่างระบบปริศนาที่เปลี่ยนทุกบาดแผลให้กลายเป็นค่าสถานะระดับเทพ",
+      "author": "KANG JIN & REDICE",
+      "origin": "korea",
+      "status": "ongoing",
+      "genres": [
+        "action",
+        "fantasy"
+      ],
+      "rating": 4.9,
+      "views": "24.7M อ่าน",
+      "followers": "510K ติดตาม",
+      "tone": "from-amber-300 to-stone-900",
+      "latestChapter": 3,
+      "badge": "TOP 1",
+      "updateDay": "เสาร์",
+      "coverUrl": "/comics/03-unrivaled-system/cover.jpg",
+      "githubCoverUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/cover.jpg",
+      "episodes": [
+        {
+          "id": "unrivaled-system-ep-1",
+          "dir": "ep-01",
+          "chapterNumber": 1,
+          "title": "หน้าต่างระบบสีทอง (RAW KR + TH Demo)",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/03-unrivaled-system/ep-01/001.jpg",
+            "/comics/03-unrivaled-system/ep-01/002.jpg",
+            "/comics/03-unrivaled-system/ep-01/003.jpg",
+            "/comics/03-unrivaled-system/ep-01/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-01/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-01/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-01/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-01/004.jpg"
+          ]
+        },
+        {
+          "id": "unrivaled-system-ep-2",
+          "dir": "ep-02",
+          "chapterNumber": 2,
+          "title": "กิลด์ใหญ่เริ่มเคลื่อนไหว",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/03-unrivaled-system/ep-02/001.jpg",
+            "/comics/03-unrivaled-system/ep-02/002.jpg",
+            "/comics/03-unrivaled-system/ep-02/003.jpg",
+            "/comics/03-unrivaled-system/ep-02/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-02/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-02/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-02/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-02/004.jpg"
+          ]
+        },
+        {
+          "id": "unrivaled-system-ep-3",
+          "dir": "ep-03",
+          "chapterNumber": 3,
+          "title": "ทลายขีดจำกัดแรงก์ S",
+          "coinPrice": 5,
+          "isPreview": true,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/03-unrivaled-system/ep-03/001.jpg",
+            "/comics/03-unrivaled-system/ep-03/002.jpg",
+            "/comics/03-unrivaled-system/ep-03/003.jpg",
+            "/comics/03-unrivaled-system/ep-03/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-03/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-03/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-03/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/03-unrivaled-system/ep-03/004.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "folder-04-reborn-as-demon",
+      "slug": "reborn-as-demon",
+      "folder": "04-reborn-as-demon",
+      "title": "เมื่อฉันเกิดใหม่เป็นจอมมาร",
+      "sub": "REBORN AS DEMON",
+      "synopsis": "ผู้กล้าที่สละชีวิตปราบจอมมารสำเร็จ กลับลืมตาตื่นขึ้นมาในร่างของจอมมารรุ่นถัดไป พร้อมลูกน้องปีศาจสุดเพี้ยนที่พยายามให้เขายึดครองโลกอีกครั้ง",
+      "author": "TAKAHASHI REN",
+      "origin": "japan",
+      "status": "completed",
+      "genres": [
+        "fantasy",
+        "comedy",
+        "action"
+      ],
+      "rating": 4.7,
+      "views": "9.8M อ่าน",
+      "followers": "210K ติดตาม",
+      "tone": "from-violet-300 to-indigo-950",
+      "latestChapter": 3,
+      "badge": "จบแล้ว",
+      "updateDay": "อาทิตย์",
+      "coverUrl": "/comics/04-reborn-as-demon/cover.jpg",
+      "githubCoverUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/cover.jpg",
+      "episodes": [
+        {
+          "id": "reborn-as-demon-ep-1",
+          "dir": "ep-01",
+          "chapterNumber": 1,
+          "title": "ตื่นมาก็ได้บัลลังก์ (และหนี้สินปราสาท)",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/04-reborn-as-demon/ep-01/001.jpg",
+            "/comics/04-reborn-as-demon/ep-01/002.jpg",
+            "/comics/04-reborn-as-demon/ep-01/003.jpg",
+            "/comics/04-reborn-as-demon/ep-01/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-01/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-01/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-01/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-01/004.jpg"
+          ]
+        },
+        {
+          "id": "reborn-as-demon-ep-2",
+          "dir": "ep-02",
+          "chapterNumber": 2,
+          "title": "ผู้กล้ารุ่นน้องบุกปราสาท!",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/04-reborn-as-demon/ep-02/001.jpg",
+            "/comics/04-reborn-as-demon/ep-02/002.jpg",
+            "/comics/04-reborn-as-demon/ep-02/003.jpg",
+            "/comics/04-reborn-as-demon/ep-02/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-02/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-02/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-02/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-02/004.jpg"
+          ]
+        },
+        {
+          "id": "reborn-as-demon-ep-3",
+          "dir": "ep-03",
+          "chapterNumber": 3,
+          "title": "ตอนจบสุดป่วน: สนธิสัญญาขนมหวาน",
+          "coinPrice": 0,
+          "isPreview": true,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/04-reborn-as-demon/ep-03/001.jpg",
+            "/comics/04-reborn-as-demon/ep-03/002.jpg",
+            "/comics/04-reborn-as-demon/ep-03/003.jpg",
+            "/comics/04-reborn-as-demon/ep-03/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-03/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-03/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-03/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/04-reborn-as-demon/ep-03/004.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "folder-05-letter-from-tomorrow",
+      "slug": "letter-from-tomorrow",
+      "folder": "05-letter-from-tomorrow",
+      "title": "จดหมายรักจากอนาคต",
+      "sub": "LETTER FROM TOMORROW",
+      "synopsis": "ตู้ไปรษณีย์เก่าริมสถานีรถไฟส่งจดหมายที่ลงวันที่ในอีก 10 ปีข้างหน้ามาถึงมือเธอ เพื่อเตือนไม่ให้เธอปล่อยมือจากคนสำคัญในฤดูฝนปีนี้",
+      "author": "AOI SORA",
+      "origin": "japan",
+      "status": "completed",
+      "genres": [
+        "romance",
+        "drama"
+      ],
+      "rating": 4.8,
+      "views": "11.3M อ่าน",
+      "followers": "340K ติดตาม",
+      "tone": "from-sky-200 to-cyan-950",
+      "latestChapter": 3,
+      "badge": "จบแล้ว",
+      "updateDay": "พฤหัสบดี",
+      "coverUrl": "/comics/05-letter-from-tomorrow/cover.jpg",
+      "githubCoverUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/cover.jpg",
+      "episodes": [
+        {
+          "id": "letter-from-tomorrow-ep-1",
+          "dir": "ep-01",
+          "chapterNumber": 1,
+          "title": "ชานชาลาที่ 1 ในวันฝนพรำ (RAW JP + TH Demo)",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/05-letter-from-tomorrow/ep-01/001.jpg",
+            "/comics/05-letter-from-tomorrow/ep-01/002.jpg",
+            "/comics/05-letter-from-tomorrow/ep-01/003.jpg",
+            "/comics/05-letter-from-tomorrow/ep-01/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-01/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-01/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-01/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-01/004.jpg"
+          ]
+        },
+        {
+          "id": "letter-from-tomorrow-ep-2",
+          "dir": "ep-02",
+          "chapterNumber": 2,
+          "title": "ร่มคันเดียวกับคำพูดที่ค้างคา",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/05-letter-from-tomorrow/ep-02/001.jpg",
+            "/comics/05-letter-from-tomorrow/ep-02/002.jpg",
+            "/comics/05-letter-from-tomorrow/ep-02/003.jpg",
+            "/comics/05-letter-from-tomorrow/ep-02/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-02/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-02/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-02/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-02/004.jpg"
+          ]
+        },
+        {
+          "id": "letter-from-tomorrow-ep-3",
+          "dir": "ep-03",
+          "chapterNumber": 3,
+          "title": "สิบปีให้หลัง ณ สถานีเดิม",
+          "coinPrice": 0,
+          "isPreview": true,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/05-letter-from-tomorrow/ep-03/001.jpg",
+            "/comics/05-letter-from-tomorrow/ep-03/002.jpg",
+            "/comics/05-letter-from-tomorrow/ep-03/003.jpg",
+            "/comics/05-letter-from-tomorrow/ep-03/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-03/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-03/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-03/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/05-letter-from-tomorrow/ep-03/004.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "folder-06-rank-zero-hunter",
+      "slug": "rank-zero-hunter",
+      "folder": "06-rank-zero-hunter",
+      "title": "นักล่าแรงก์ศูนย์",
+      "sub": "RANK ZERO HUNTER",
+      "synopsis": "ในโลกที่ฮันเตอร์ถูกวัดค่าด้วยแรงก์ A ถึง F เขาคือคนเดียวที่เครื่องวัดแสดงผลเป็น “แรงก์ 0” ซึ่งซ่อนพลังดูดกลืนมอนสเตอร์ระดับภัยพิบัติไว้",
+      "author": "STUDIOAPEX",
+      "origin": "korea",
+      "status": "ongoing",
+      "genres": [
+        "action",
+        "fantasy"
+      ],
+      "rating": 4.7,
+      "views": "15.6M อ่าน",
+      "followers": "318K ติดตาม",
+      "tone": "from-lime-300 to-green-950",
+      "latestChapter": 3,
+      "badge": "HOT",
+      "updateDay": "อาทิตย์",
+      "coverUrl": "/comics/06-rank-zero-hunter/cover.jpg",
+      "githubCoverUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/cover.jpg",
+      "episodes": [
+        {
+          "id": "rank-zero-hunter-ep-1",
+          "dir": "ep-01",
+          "chapterNumber": 1,
+          "title": "ตัวเลข 0 ที่ทุกคนหัวเราะเยาะ",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/06-rank-zero-hunter/ep-01/001.jpg",
+            "/comics/06-rank-zero-hunter/ep-01/002.jpg",
+            "/comics/06-rank-zero-hunter/ep-01/003.jpg",
+            "/comics/06-rank-zero-hunter/ep-01/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-01/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-01/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-01/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-01/004.jpg"
+          ]
+        },
+        {
+          "id": "rank-zero-hunter-ep-2",
+          "dir": "ep-02",
+          "chapterNumber": 2,
+          "title": "การประมูลหอคอยทมิฬ",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/06-rank-zero-hunter/ep-02/001.jpg",
+            "/comics/06-rank-zero-hunter/ep-02/002.jpg",
+            "/comics/06-rank-zero-hunter/ep-02/003.jpg",
+            "/comics/06-rank-zero-hunter/ep-02/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-02/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-02/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-02/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-02/004.jpg"
+          ]
+        },
+        {
+          "id": "rank-zero-hunter-ep-3",
+          "dir": "ep-03",
+          "chapterNumber": 3,
+          "title": "ความลับของแรงก์ศูนย์",
+          "coinPrice": 5,
+          "isPreview": true,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/06-rank-zero-hunter/ep-03/001.jpg",
+            "/comics/06-rank-zero-hunter/ep-03/002.jpg",
+            "/comics/06-rank-zero-hunter/ep-03/003.jpg",
+            "/comics/06-rank-zero-hunter/ep-03/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-03/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-03/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-03/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/06-rank-zero-hunter/ep-03/004.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "folder-07-eclipse-academy",
+      "slug": "eclipse-academy",
+      "folder": "07-eclipse-academy",
+      "title": "โรงเรียนมหาเวทสุริยคราส",
+      "sub": "ECLIPSE ACADEMY",
+      "synopsis": "สถาบันเวทมนตร์ลอยฟ้าที่แบ่งขั้วระหว่างสายสุริยันและสายจันทรา เด็กหนุ่มไฟสุริยันและเด็กสาวเวทคราสต้องจับคู่สอบผ่านบททดสอบมรณะเพื่อหยุดยั้งคำสาปพันปี",
+      "author": "SOLAR & LUNA",
+      "origin": "korea",
+      "status": "ongoing",
+      "genres": [
+        "fantasy",
+        "action",
+        "drama"
+      ],
+      "rating": 4.8,
+      "views": "14.2M อ่าน",
+      "followers": "305K ติดตาม",
+      "tone": "from-indigo-400 to-rose-950",
+      "latestChapter": 3,
+      "badge": "UP",
+      "updateDay": "จันทร์",
+      "coverUrl": "/comics/07-eclipse-academy/cover.jpg",
+      "githubCoverUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/cover.jpg",
+      "episodes": [
+        {
+          "id": "eclipse-academy-ep-1",
+          "dir": "ep-01",
+          "chapterNumber": 1,
+          "title": "พิธีปฐมนิเทศใต้เงาสุริยคราส",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/07-eclipse-academy/ep-01/001.jpg",
+            "/comics/07-eclipse-academy/ep-01/002.jpg",
+            "/comics/07-eclipse-academy/ep-01/003.jpg",
+            "/comics/07-eclipse-academy/ep-01/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-01/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-01/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-01/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-01/004.jpg"
+          ]
+        },
+        {
+          "id": "eclipse-academy-ep-2",
+          "dir": "ep-02",
+          "chapterNumber": 2,
+          "title": "หอสมุดต้องห้ามชั้นใต้ดิน",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/07-eclipse-academy/ep-02/001.jpg",
+            "/comics/07-eclipse-academy/ep-02/002.jpg",
+            "/comics/07-eclipse-academy/ep-02/003.jpg",
+            "/comics/07-eclipse-academy/ep-02/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-02/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-02/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-02/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-02/004.jpg"
+          ]
+        },
+        {
+          "id": "eclipse-academy-ep-3",
+          "dir": "ep-03",
+          "chapterNumber": 3,
+          "title": "ศึกชิงธงระหว่างหอพัก",
+          "coinPrice": 5,
+          "isPreview": true,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/07-eclipse-academy/ep-03/001.jpg",
+            "/comics/07-eclipse-academy/ep-03/002.jpg",
+            "/comics/07-eclipse-academy/ep-03/003.jpg",
+            "/comics/07-eclipse-academy/ep-03/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-03/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-03/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-03/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/07-eclipse-academy/ep-03/004.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "folder-08-shadow-apothecary",
+      "slug": "shadow-apothecary",
+      "folder": "08-shadow-apothecary",
+      "title": "ปรมาจารย์โอสถเงา",
+      "sub": "SHADOW APOTHECARY",
+      "synopsis": "จอมยุทธ์ผู้ถูกทำลายเส้นชีพจรกลับชาติมาเกิดในร่างหมอยาลึกลับบนยอดเขาไผ่ ใช้เตาหลอมสำริดปรุงโอสถเทวะและพิษเงาเพื่อทวงคืนยุทธภพ",
+      "author": "YUN ZHI STUDIO",
+      "origin": "china",
+      "status": "ongoing",
+      "genres": [
+        "action",
+        "historical",
+        "fantasy"
+      ],
+      "rating": 4.8,
+      "views": "16.9M อ่าน",
+      "followers": "360K ติดตาม",
+      "tone": "from-teal-300 to-emerald-950",
+      "latestChapter": 3,
+      "badge": "HOT",
+      "updateDay": "อังคาร",
+      "coverUrl": "/comics/08-shadow-apothecary/cover.jpg",
+      "githubCoverUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/cover.jpg",
+      "episodes": [
+        {
+          "id": "shadow-apothecary-ep-1",
+          "dir": "ep-01",
+          "chapterNumber": 1,
+          "title": "เตาหลอมสำริดและควันหยกทมิฬ",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/08-shadow-apothecary/ep-01/001.jpg",
+            "/comics/08-shadow-apothecary/ep-01/002.jpg",
+            "/comics/08-shadow-apothecary/ep-01/003.jpg",
+            "/comics/08-shadow-apothecary/ep-01/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-01/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-01/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-01/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-01/004.jpg"
+          ]
+        },
+        {
+          "id": "shadow-apothecary-ep-2",
+          "dir": "ep-02",
+          "chapterNumber": 2,
+          "title": "พรรคโลหิตบุกหุบเขาไผ่",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/08-shadow-apothecary/ep-02/001.jpg",
+            "/comics/08-shadow-apothecary/ep-02/002.jpg",
+            "/comics/08-shadow-apothecary/ep-02/003.jpg",
+            "/comics/08-shadow-apothecary/ep-02/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-02/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-02/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-02/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-02/004.jpg"
+          ]
+        },
+        {
+          "id": "shadow-apothecary-ep-3",
+          "dir": "ep-03",
+          "chapterNumber": 3,
+          "title": "งานประลองโอสถแห่งเมืองหลวง",
+          "coinPrice": 5,
+          "isPreview": true,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/08-shadow-apothecary/ep-03/001.jpg",
+            "/comics/08-shadow-apothecary/ep-03/002.jpg",
+            "/comics/08-shadow-apothecary/ep-03/003.jpg",
+            "/comics/08-shadow-apothecary/ep-03/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-03/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-03/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-03/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/08-shadow-apothecary/ep-03/004.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "folder-09-neon-shinjuku-99",
+      "slug": "neon-shinjuku-99",
+      "folder": "09-neon-shinjuku-99",
+      "title": "ชินจูกุ 99: หน่วยล่าวิญญาณไซเบอร์",
+      "sub": "NEON SHINJUKU 99",
+      "synopsis": "โตเกียวปี 2099 เมื่อวิญญาณอาฆาตซิงก์เข้ากับเครือข่ายโฮโลแกรม นักสืบไซเบอร์หน่วย 99 ต้องใช้กระสุนอาคมปิดคดีเหนือธรรมชาติกลางตรอกนีออนชินจูกุ",
+      "author": "KURODA KEN",
+      "origin": "japan",
+      "status": "ongoing",
+      "genres": [
+        "action",
+        "drama"
+      ],
+      "rating": 4.9,
+      "views": "13.4M อ่าน",
+      "followers": "288K ติดตาม",
+      "tone": "from-cyan-400 to-fuchsia-950",
+      "latestChapter": 3,
+      "badge": "ใหม่",
+      "updateDay": "พฤหัสบดี",
+      "coverUrl": "/comics/09-neon-shinjuku-99/cover.jpg",
+      "githubCoverUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/cover.jpg",
+      "episodes": [
+        {
+          "id": "neon-shinjuku-99-ep-1",
+          "dir": "ep-01",
+          "chapterNumber": 1,
+          "title": "ผีไซเบอร์ในป้ายไฟนีออน (RAW JP + TH Demo)",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/09-neon-shinjuku-99/ep-01/001.jpg",
+            "/comics/09-neon-shinjuku-99/ep-01/002.jpg",
+            "/comics/09-neon-shinjuku-99/ep-01/003.jpg",
+            "/comics/09-neon-shinjuku-99/ep-01/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-01/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-01/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-01/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-01/004.jpg"
+          ]
+        },
+        {
+          "id": "neon-shinjuku-99-ep-2",
+          "dir": "ep-02",
+          "chapterNumber": 2,
+          "title": "หน้ากากจิ้งจอกบนดาดฟ้าคาบุกิโจ",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/09-neon-shinjuku-99/ep-02/001.jpg",
+            "/comics/09-neon-shinjuku-99/ep-02/002.jpg",
+            "/comics/09-neon-shinjuku-99/ep-02/003.jpg",
+            "/comics/09-neon-shinjuku-99/ep-02/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-02/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-02/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-02/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-02/004.jpg"
+          ]
+        },
+        {
+          "id": "neon-shinjuku-99-ep-3",
+          "dir": "ep-03",
+          "chapterNumber": 3,
+          "title": "คลื่นเสียงต้องห้าม",
+          "coinPrice": 5,
+          "isPreview": true,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/09-neon-shinjuku-99/ep-03/001.jpg",
+            "/comics/09-neon-shinjuku-99/ep-03/002.jpg",
+            "/comics/09-neon-shinjuku-99/ep-03/003.jpg",
+            "/comics/09-neon-shinjuku-99/ep-03/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-03/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-03/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-03/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/09-neon-shinjuku-99/ep-03/004.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "folder-10-duchess-contract",
+      "slug": "duchess-contract",
+      "folder": "10-duchess-contract",
+      "title": "สัญญาลับดัชเชสสายโหด",
+      "sub": "THE DUCHESS'S CONTRACT",
+      "synopsis": "เมื่อนักดาบหญิงอันดับหนึ่งทะลุมิติเข้ามาในร่างดัชเชสผู้อ่อนแอที่กำลังจะถูกสามีหย่า เธอจึงฉีกสัญญาเดิมทิ้งแล้วท้าดวลทุกคนในราชสำนักด้วยดาบเรเปียร์!",
+      "author": "ROSÉ & CROWN",
+      "origin": "korea",
+      "status": "ongoing",
+      "genres": [
+        "romance",
+        "fantasy",
+        "drama"
+      ],
+      "rating": 4.9,
+      "views": "21.5M อ่าน",
+      "followers": "460K ติดตาม",
+      "tone": "from-pink-300 to-purple-950",
+      "latestChapter": 3,
+      "badge": "TOP 2",
+      "updateDay": "ศุกร์",
+      "coverUrl": "/comics/10-duchess-contract/cover.jpg",
+      "githubCoverUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/cover.jpg",
+      "episodes": [
+        {
+          "id": "duchess-contract-ep-1",
+          "dir": "ep-01",
+          "chapterNumber": 1,
+          "title": "ฉีกใบหย่าด้วยปลายดาบ!",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/10-duchess-contract/ep-01/001.jpg",
+            "/comics/10-duchess-contract/ep-01/002.jpg",
+            "/comics/10-duchess-contract/ep-01/003.jpg",
+            "/comics/10-duchess-contract/ep-01/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-01/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-01/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-01/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-01/004.jpg"
+          ]
+        },
+        {
+          "id": "duchess-contract-ep-2",
+          "dir": "ep-02",
+          "chapterNumber": 2,
+          "title": "งานเลี้ยงน้ำชาที่ร้อนแรงเกินคาด",
+          "coinPrice": 0,
+          "isPreview": false,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/10-duchess-contract/ep-02/001.jpg",
+            "/comics/10-duchess-contract/ep-02/002.jpg",
+            "/comics/10-duchess-contract/ep-02/003.jpg",
+            "/comics/10-duchess-contract/ep-02/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-02/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-02/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-02/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-02/004.jpg"
+          ]
+        },
+        {
+          "id": "duchess-contract-ep-3",
+          "dir": "ep-03",
+          "chapterNumber": 3,
+          "title": "ข้อตกลงใหม่ของหัวใจ",
+          "coinPrice": 5,
+          "isPreview": true,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/10-duchess-contract/ep-03/001.jpg",
+            "/comics/10-duchess-contract/ep-03/002.jpg",
+            "/comics/10-duchess-contract/ep-03/003.jpg",
+            "/comics/10-duchess-contract/ep-03/004.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-03/001.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-03/002.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-03/003.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/10-duchess-contract/ep-03/004.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "folder-11Absolute-Regression-หวนคืนนิรันดร์กาล",
+      "slug": "Absolute-Regression-หวนคืนนิรันดร์กาล",
+      "folder": "11Absolute-Regression-หวนคืนนิรันดร์กาล",
+      "title": "หวนคืนนิรันดร์กาล (Absolute Regression)",
+      "sub": "ABSOLUTE REGRESSION",
+      "synopsis": "คุณชายรองแห่งลัทธิมารผู้สูญเสียทุกสิ่งในศึกชี้ชะตา ใช้วิชาต้องห้ามย้อนเวลากลับมาสู่อดีตอีกครั้ง พร้อมความทรงจำและวรยุทธ์ระดับปรมาจารย์ เพื่อเปลี่ยนชะตากรรมของยุทธภพให้ไม่ซ้ำรอยเดิม (ตอนที่ 1 ครบ 34 หน้าเต็มจากคลัง GitHub)",
+      "author": "JANG YEONG-HUN / PARK JIN-HWAN",
+      "origin": "korea",
+      "status": "ongoing",
+      "genres": [
+        "action",
+        "fantasy",
+        "historical"
+      ],
+      "rating": 4.95,
+      "views": "19.2M อ่าน",
+      "followers": "415K ติดตาม",
+      "tone": "from-emerald-400 to-zinc-950",
+      "latestChapter": 1,
+      "badge": "HOT",
+      "updateDay": "ศุกร์",
+      "coverUrl": "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/cover.jpg",
+      "githubCoverUrl": "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/cover.jpg",
+      "episodes": [
+        {
+          "id": "Absolute-Regression-หวนคืนนิรันดร์กาล-ep-1",
+          "dir": "ep-01",
+          "chapterNumber": 1,
+          "title": "ตอนที่ 1 หวนคืนสู่อดีตกาล (34 หน้าเต็ม)",
+          "coinPrice": 0,
+          "isPreview": true,
+          "publishedAt": "ล่าสุด",
+          "pages": [
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-1.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-2.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-3.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-4.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-5.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-6.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-7.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-8.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-9.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-10.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-11.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-12.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-13.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-14.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-15.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-16.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-17.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-18.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-19.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-20.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-21.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-22.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-23.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-24.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-25.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-26.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-27.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-28.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-29.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-30.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-31.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-32.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-33.jpg",
+            "/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-34.jpg"
+          ],
+          "githubPages": [
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-1.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-2.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-3.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-4.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-5.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-6.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-7.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-8.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-9.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-10.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-11.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-12.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-13.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-14.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-15.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-16.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-17.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-18.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-19.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-20.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-21.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-22.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-23.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-24.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-25.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-26.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-27.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-28.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-29.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-30.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-31.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-32.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-33.jpg",
+            "https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/11Absolute-Regression-%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B8%84%E0%B8%B7%E0%B8%99%E0%B8%99%E0%B8%B4%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B8%94%E0%B8%A3%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A5/ep-01/Absolute-Regression-ep1-34.jpg"
+          ]
+        }
+      ]
+    }
+  ]
+}

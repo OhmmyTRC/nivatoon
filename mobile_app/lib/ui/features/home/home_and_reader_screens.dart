@@ -257,6 +257,74 @@ class _MainHomeShellState extends State<MainHomeShell> {
     return ListView(
       padding: const EdgeInsets.all(14),
       children: <Widget>[
+        // GitHub File Storage & Firebase Database Cloud Status Bar
+        Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: const Color(0xFF18181B),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Row(
+            children: <Widget>[
+              const Icon(
+                Icons.cloud_done_rounded,
+                color: Color(0xFF00DC64),
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'GitHub Storage (OhmmyTRC/nivatoon) • ${widget.repo.seriesList.length} เรื่อง (${widget.repo.totalGitHubPagesCount} หน้า)',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 11,
+                      ),
+                    ),
+                    Text(
+                      'Firebase DB (niva-421c2) • ซิงก์ล่าสุด: ${widget.repo.lastCloudSyncAt}',
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              TextButton.icon(
+                onPressed: widget.repo.isSyncingCloud
+                    ? null
+                    : () async {
+                        final messenger = ScaffoldMessenger.of(context);
+                        final res =
+                            await widget.repo.syncWithGitHubAndFirebase();
+                        if (!mounted) return;
+                        messenger.showSnackBar(
+                          SnackBar(content: Text(res.message)),
+                        );
+                      },
+                icon: const Icon(
+                  Icons.sync_rounded,
+                  size: 15,
+                  color: Color(0xFF00DC64),
+                ),
+                label: Text(
+                  widget.repo.isSyncingCloud ? 'ซิงก์...' : 'ซิงก์',
+                  style: const TextStyle(
+                    color: Color(0xFF00DC64),
+                    fontWeight: FontWeight.w900,
+                    fontSize: 11,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
         // Hero Banner
         GestureDetector(
           onTap: () => _openSeries(hero),

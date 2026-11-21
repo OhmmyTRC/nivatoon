@@ -6,6 +6,7 @@ import { NextResponse } from 'next/server'
 import { addSystemLog, findUserById, getDb } from '@/lib/app-db'
 import { getServerSession, sanitizePublicUser } from '@/lib/auth'
 import { syncDocToFirebase } from '@/lib/firebase-db'
+import { syncPublicFilesToGitHub, toGitHubRawUrl } from '@/lib/github-storage'
 
 export async function POST(request: Request) {
   const { session, user } = await getServerSession()
@@ -77,6 +78,7 @@ export async function POST(request: Request) {
     const reqId = `creq-${crypto.randomUUID()}`
     const sampleDir = path.join(process.cwd(), 'public', 'uploads', 'creator-samples', reqId)
     fs.mkdirSync(sampleDir, { recursive: true })
+    const repoPathsToPush: string[] = []
 
     let sampleCoverUrl: string | null = null
     if (coverFile) {
@@ -84,6 +86,7 @@ export async function POST(request: Request) {
       const jpg = await sharp(buf).jpeg({ quality: 88 }).toBuffer()
       fs.writeFileSync(path.join(sampleDir, 'cover.jpg'), jpg)
       sampleCoverUrl = `/uploads/creator-samples/${reqId}/cover.jpg`
+      repoPathsToPush.push(`public/uploads/creator-samples/${reqId}/cover.jpg`)
     }
 
     const samplePages: string[] = []
@@ -94,6 +97,7 @@ export async function POST(request: Request) {
       const name = `${String(i + 1).padStart(3, '0')}.jpg`
       fs.writeFileSync(path.join(sampleDir, name), jpg)
       samplePages.push(`/uploads/creator-samples/${reqId}/${name}`)
+      repoPathsToPush.push(`public/uploads/creator-samples/${reqId}/${name}`)
     }
 
     if (!sampleCoverUrl && samplePages.length > 0) {
@@ -134,13 +138,24 @@ export async function POST(request: Request) {
       throw e
     }
 
+    // Push sample files to GitHub File Storage
+    const githubSync = await syncPublicFilesToGitHub({
+      repoRelativePaths: repoPathsToPush,
+      commitMessage: `feat(creator-sample): upload sample artwork ${reqId} (${sampleTitle})`,
+    })
+
+    // Sync creator request with GitHub Raw URLs to Firebase Database
     await syncDocToFirebase('creator_requests', reqId, {
       id: reqId,
       userId: user.id,
       email: user.email,
+      displayName: user.display_name,
       penName,
       sampleTitle,
       portfolioNote,
+      sampleSynopsis,
+      sampleCoverUrl: toGitHubRawUrl(sampleCoverUrl) || sampleCoverUrl,
+      samplePages: samplePages.map((p) => toGitHubRawUrl(p) || p),
       status: 'pending',
       createdAt: now,
     })
@@ -148,7 +163,7 @@ export async function POST(request: Request) {
     addSystemLog(
       'info',
       'creator-request',
-      `${user.email} ยื่นคำขอสิทธิ์ครีเอเตอร์พร้อมผลงานตัวอย่าง "${sampleTitle}" (${samplePages.length} หน้า)`,
+      `${user.email} ยื่นคำขอสิทธิ์ครีเอเตอร์พร้อมผลงานตัวอย่าง "${sampleTitle}" (${samplePages.length} หน้า • เก็บไฟล์บน GitHub & ซิงก์ Firebase)`,
       user.email,
     )
 
@@ -157,7 +172,9 @@ export async function POST(request: Request) {
       ok: true,
       requestId: reqId,
       sampleCoverUrl,
+      githubSampleCoverUrl: toGitHubRawUrl(sampleCoverUrl),
       samplePagesCount: samplePages.length,
+      githubSync,
       user: sanitizePublicUser(updated),
     })
   } catch (err: any) {

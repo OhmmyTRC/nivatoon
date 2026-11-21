@@ -87,6 +87,12 @@ export async function POST(request: Request) {
     if (typeof body.strictSlipCheck === 'boolean') {
       updates.strict_slip_check = body.strictSlipCheck ? 'true' : 'false'
     }
+    if (typeof body.githubToken === 'string' && body.githubToken.trim()) {
+      updates.github_token = body.githubToken.trim()
+    }
+    if (typeof body.githubRepo === 'string' && body.githubRepo.trim()) {
+      updates.github_repo = body.githubRepo.trim()
+    }
 
     setSystemSettings(updates)
     addSystemLog('security', 'admin-settings', `แอดมินอัปเดตการตั้งค่า AI / Email / Payment Rules`, user.email)

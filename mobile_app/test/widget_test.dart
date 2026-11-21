@@ -1,22 +1,30 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nivatoon_mobile/data/repositories/nivatoon_repository.dart';
+import 'package:nivatoon_mobile/data/services/cloud_storage_and_db_service.dart';
 import 'package:nivatoon_mobile/data/services/promptpay_service.dart';
 import 'package:nivatoon_mobile/data/services/server_config_service.dart';
 import 'package:nivatoon_mobile/main.dart';
 
 void main() {
-  test('ServerConfigService & PromptPayService 35 THB QR payload', () {
+  test('ServerConfigService, GitHub Raw URL & PromptPayService 35 THB QR payload', () {
     expect(
       ServerConfigService.normalizeUrl('192.168.0.20:3000/'),
       'http://192.168.0.20:3000',
+    );
+    expect(
+      CloudStorageAndDbService.toGitHubRawUrl('/comics/01-moonlit-sword/ep-01/001.jpg'),
+      'https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public/comics/01-moonlit-sword/ep-01/001.jpg',
     );
     final payload35 = PromptPayService.buildPromptPayPayload(35);
     expect(payload35.contains('540535.00'), isTrue);
     expect(payload35.contains('149.00'), isFalse);
   });
 
-  test('NivatoonRepository enforces 0 coins, 3 free tickets, 7-day check-in & PIN change', () {
+  test('NivatoonRepository enforces 0 coins, 3 free tickets, 7-day check-in, PIN change & GitHub pages', () {
     final repo = NivatoonRepository();
+    expect(repo.seriesList.length, greaterThanOrEqualTo(11));
+    expect(repo.seriesList.first.slug, 'Absolute-Regression-หวนคืนนิรันดร์กาล');
+    expect(repo.seriesList.first.episodes.first.pageAssets.length, 34);
     final reg = repo.register(
       displayName: 'New Reader',
       email: 'newreader@gmail.com',

@@ -964,6 +964,10 @@ export function getAllSystemSettingsSafe() {
   const dbSmtpPass = getSystemSetting('smtp_pass')
   const envSmtpPass = process.env.SMTP_PASS?.trim() || null
 
+  const dbGhToken = getSystemSetting('github_token')
+  const envGhToken = process.env.GITHUB_TOKEN?.trim() || null
+  const activeGhToken = dbGhToken || envGhToken
+
   return {
     hasGeminiApiKey: Boolean(activeGemini),
     geminiKeySource: dbGemini ? 'admin-db' : envGemini ? 'env' : 'none',
@@ -978,6 +982,11 @@ export function getAllSystemSettingsSafe() {
     hasSmtpPass: Boolean(dbSmtpPass || envSmtpPass),
     smtpFrom: getSystemSetting('smtp_from') || process.env.SMTP_FROM || 'NIVATOON <no-reply@nivatoon.app>',
     strictSlipCheck: (getSystemSetting('strict_slip_check') ?? 'true') !== 'false',
+    githubRepo: getSystemSetting('github_repo') || 'OhmmyTRC/nivatoon',
+    githubBranch: getSystemSetting('github_branch') || 'main',
+    hasGithubToken: Boolean(activeGhToken),
+    maskedGithubToken: maskKey(activeGhToken),
+    firebaseProjectId: 'niva-421c2',
   }
 }
 

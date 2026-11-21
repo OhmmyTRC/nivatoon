@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 import { getAnalyticsDashboardData } from '@/lib/app-db'
 import { getServerSession } from '@/lib/auth'
 import { scanComicsDirectory } from '@/lib/comics-fs'
-import { getFirebaseStatus } from '@/lib/firebase-db'
+import { getFirebaseStatus, pullCloudStateFromFirebase } from '@/lib/firebase-db'
+import { getGitHubStorageStatus, toGitHubRawUrl } from '@/lib/github-storage'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,6 +19,9 @@ export async function GET() {
     )
   }
 
+  // Pull any mobile-originated records from Firebase before building dashboard analytics
+  await pullCloudStateFromFirebase()
+
   const analytics = getAnalyticsDashboardData()
   const seriesCatalog = scanComicsDirectory()
 
@@ -30,17 +34,20 @@ export async function GET() {
       title: match?.title ?? stat.series_slug,
       sub: match?.sub ?? stat.series_slug.toUpperCase(),
       coverUrl: match?.coverUrl ?? null,
+      githubCoverUrl: toGitHubRawUrl(match?.coverUrl ?? null),
       origin: match?.origin ?? 'korea',
       episodesCount: match?.episodes.length ?? 0,
     }
   })
 
   const firebaseStatus = getFirebaseStatus()
+  const githubStorage = getGitHubStorageStatus()
 
   return NextResponse.json({
     ok: true,
     firebaseConnected: firebaseStatus.adminConnected,
     firebaseStatus,
+    githubStorage,
     summary: analytics.summary,
     topSpenders: analytics.topSpenders,
     popularSeries: popularSeriesEnriched,

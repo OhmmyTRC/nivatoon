@@ -923,6 +923,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   final TextEditingController _promoTitleCtrl = TextEditingController();
   final TextEditingController _promoMsgCtrl = TextEditingController();
   final TextEditingController _geminiKeyCtrl = TextEditingController();
+  final TextEditingController _githubTokenCtrl = TextEditingController();
   final TextEditingController _smtpUserCtrl =
       TextEditingController(text: 'nivatoonadmin@gmail.com');
   final TextEditingController _smtpPassCtrl = TextEditingController();
@@ -933,6 +934,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     _promoTitleCtrl.dispose();
     _promoMsgCtrl.dispose();
     _geminiKeyCtrl.dispose();
+    _githubTokenCtrl.dispose();
     _smtpUserCtrl.dispose();
     _smtpPassCtrl.dispose();
     super.dispose();
@@ -1224,6 +1226,42 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         ),
                         const SizedBox(height: 12),
                         const Text(
+                          'คลังเก็บไฟล์ GitHub (OhmmyTRC/nivatoon) & ฐานข้อมูล Firebase (niva-421c2)',
+                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
+                        ),
+                        const SizedBox(height: 6),
+                        TextField(
+                          controller: _githubTokenCtrl,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            labelText:
+                                'GitHub Personal Access Token (ghp_...) สำหรับอัปโหลดไฟล์ขึ้น GitHub API',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        OutlinedButton.icon(
+                          onPressed: widget.repo.isSyncingCloud
+                              ? null
+                              : () async {
+                                  final messenger =
+                                      ScaffoldMessenger.of(context);
+                                  final res = await widget.repo
+                                      .syncWithGitHubAndFirebase();
+                                  if (!mounted) return;
+                                  messenger.showSnackBar(
+                                    SnackBar(content: Text(res.message)),
+                                  );
+                                },
+                          icon: const Icon(Icons.cloud_sync_rounded),
+                          label: Text(
+                            widget.repo.isSyncingCloud
+                                ? 'กำลังซิงก์ข้อมูล GitHub & Firebase...'
+                                : 'ซิงก์ไฟล์จาก GitHub & ฐานข้อมูล Firebase ทันที',
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        const Text(
                           'ตั้งค่า Gmail SMTP ส่งรหัส OTP 6 หลัก (ต้องใช้ App Password 16 หลักจาก Google 2-Step Verification)',
                           style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12),
                         ),
@@ -1256,11 +1294,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                               port: widget.repo.smtpPort,
                               userEmail: _smtpUserCtrl.text,
                               appPassword: _smtpPassCtrl.text,
+                              githubToken: _githubTokenCtrl.text,
                               strictSlip: true,
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('บันทึกตั้งค่า AI v1beta & SMTP แล้ว ✓'),
+                                content: Text('บันทึกตั้งค่า AI v1beta / GitHub / SMTP แล้ว ✓'),
                               ),
                             );
                           },
