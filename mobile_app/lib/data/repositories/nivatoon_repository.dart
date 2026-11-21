@@ -20,6 +20,7 @@ class NivatoonRepository extends ChangeNotifier {
         _cloud = cloudService ?? CloudStorageAndDbService() {
     _seedInitialData();
     if (autoCloudSync) {
+      _useLiveWebView = true;
       unawaited(syncWithGitHubAndFirebase());
     }
   }

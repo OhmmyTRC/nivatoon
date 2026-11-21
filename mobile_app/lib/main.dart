@@ -14,7 +14,7 @@ void main() {
 }
 
 /// Root widget for the NIVATOON Android application
-/// (GitHub File Storage `OhmmyTRC/nivatoon` + Firebase Cloud Database `niva-421c2`).
+/// (1:1 Webtoon UI + GitHub File Storage `OhmmyTRC/nivatoon` + Firebase Cloud Database `niva-421c2`).
 class NivatoonApp extends StatefulWidget {
   const NivatoonApp({super.key, this.home, this.repository});
 
@@ -66,22 +66,8 @@ class _NivatoonAppState extends State<NivatoonApp> {
 
   Widget _buildActiveGate() {
     if (_repo.useLiveWebView) {
-      return Scaffold(
-        body: const NivatoonShellView(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => _repo.setUseLiveWebView(false),
-          backgroundColor: const Color(0xFF18181B),
-          icon: const Icon(Icons.phone_android_rounded, color: Color(0xFF00DC64)),
-          label: const Text(
-            'กลับโหมดแอป Native',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w800,
-              fontSize: 12,
-            ),
-          ),
-        ),
+      return NivatoonShellView(
+        onSwitchToNative: () => _repo.setUseLiveWebView(false),
       );
     }
     if (!_repo.isAuthenticated) {

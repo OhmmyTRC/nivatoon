@@ -5,11 +5,13 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:nivatoon_mobile/data/services/server_config_service.dart';
 import 'package:nivatoon_mobile/ui/features/shell/view_models/nivatoon_shell_view_model.dart';
 
-/// Main NIVATOON Android container hosting the responsive web app + server tools.
+/// Main NIVATOON Android container hosting the 1:1 responsive web app (`http://localhost:3000/`
+/// or embedded GitHub Storage + Firebase DB Tailwind WebApp).
 class NivatoonShellView extends StatefulWidget {
-  const NivatoonShellView({super.key, this.viewModel});
+  const NivatoonShellView({super.key, this.viewModel, this.onSwitchToNative});
 
   final NivatoonShellViewModel? viewModel;
+  final VoidCallback? onSwitchToNative;
 
   @override
   State<NivatoonShellView> createState() => _NivatoonShellViewState();
@@ -35,7 +37,11 @@ class _NivatoonShellViewState extends State<NivatoonShellView> {
   }
 
   Future<void> _openServerSettingsSheet() async {
-    final textCtrl = TextEditingController(text: _vm.activeUrl);
+    final textCtrl = TextEditingController(
+      text: _vm.usingEmbeddedCloudApp
+          ? ServerConfigService.presets.first.url
+          : _vm.activeUrl,
+    );
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -57,38 +63,55 @@ class _NivatoonShellViewState extends State<NivatoonShellView> {
               children: <Widget>[
                 const Row(
                   children: <Widget>[
-                    Icon(Icons.dns_rounded, color: Color(0xFF00A84B)),
+                    Icon(Icons.cloud_done_rounded, color: Color(0xFF00A84B)),
                     SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'ตั้งค่าที่อยู่เซิร์ฟเวอร์ NIVATOON',
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900),
+                        'โหมดแสดงผล NIVATOON (1:1 Web UI & Cloud)',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'ปัจจุบัน: ${_vm.activeUrl}',
+                  _vm.usingEmbeddedCloudApp
+                      ? 'สถานะปัจจุบัน: โหมด 1:1 Cloud Web UI (GitHub Storage OhmmyTRC/nivatoon + Firebase DB niva-421c2)'
+                      : 'สถานะปัจจุบัน: เชื่อมต่อเซิร์ฟเวอร์สด (${_vm.activeUrl})',
                   style: const TextStyle(fontSize: 12, color: Colors.black54),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 12),
+                FilledButton.icon(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                    _vm.loadEmbeddedCloudWebApp();
+                  },
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFF18181B),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  icon: const Icon(Icons.cloud_queue_rounded, color: Color(0xFF00DC64)),
+                  label: const Text(
+                    'ใช้โหมด 1:1 Cloud Web UI (GitHub + Firebase ไม่ต้องเปิดคอมฯ)',
+                    style: TextStyle(
+                      color: Color(0xFF00DC64),
+                      fontWeight: FontWeight.w900,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
                 TextField(
                   controller: textCtrl,
                   keyboardType: TextInputType.url,
                   decoration: InputDecoration(
-                    labelText: 'Server URL (เช่น http://192.168.0.20:3000 หรือ HTTPS)',
+                    labelText: 'หรือเชื่อมต่อ Server URL (เช่น http://192.168.0.20:3000)',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
-                const Text(
-                  'เลือกด่วน:',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 ...ServerConfigService.presets.map(
                   (preset) => Padding(
                     padding: const EdgeInsets.only(bottom: 6),
@@ -130,7 +153,7 @@ class _NivatoonShellViewState extends State<NivatoonShellView> {
                           _vm.reload();
                         },
                         icon: const Icon(Icons.refresh_rounded, size: 18),
-                        label: const Text('รีเฟรชหน้าเว็บ'),
+                        label: const Text('รีเฟรชหน้าจอ'),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -144,13 +167,24 @@ class _NivatoonShellViewState extends State<NivatoonShellView> {
                           backgroundColor: const Color(0xFF00DC64),
                         ),
                         child: const Text(
-                          'บันทึกและเชื่อมต่อ',
+                          'เชื่อมต่อ URL นี้',
                           style: TextStyle(fontWeight: FontWeight.w800),
                         ),
                       ),
                     ),
                   ],
                 ),
+                if (widget.onSwitchToNative != null) ...<Widget>[
+                  const SizedBox(height: 8),
+                  TextButton.icon(
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                      widget.onSwitchToNative?.call();
+                    },
+                    icon: const Icon(Icons.phone_android_rounded, size: 16),
+                    label: const Text('สลับไปโหมด Native Dart UI สำรอง'),
+                  ),
+                ],
               ],
             ),
           ),
@@ -194,13 +228,6 @@ class _NivatoonShellViewState extends State<NivatoonShellView> {
                 children: <Widget>[
                   if (_vm.initializing || ctrl == null)
                     const _BootScreen()
-                  else if (_vm.hasLoadError)
-                    _ConnectionErrorView(
-                      url: _vm.activeUrl,
-                      detail: _vm.errorDetail,
-                      onRetry: _vm.reload,
-                      onOpenSettings: _openServerSettingsSheet,
-                    )
                   else
                     WebViewWidget(controller: ctrl),
                   if (_vm.progress > 0 && _vm.progress < 100)
@@ -217,9 +244,9 @@ class _NivatoonShellViewState extends State<NivatoonShellView> {
                     ),
                   Positioned(
                     right: 10,
-                    bottom: 86,
+                    bottom: 74,
                     child: Opacity(
-                      opacity: 0.72,
+                      opacity: 0.78,
                       child: Material(
                         color: const Color(0xFF09090B),
                         shape: const CircleBorder(),
@@ -230,7 +257,7 @@ class _NivatoonShellViewState extends State<NivatoonShellView> {
                           child: const Padding(
                             padding: EdgeInsets.all(8),
                             child: Icon(
-                              Icons.settings_ethernet_rounded,
+                              Icons.cloud_sync_rounded,
                               size: 18,
                               color: Color(0xFF00DC64),
                             ),
@@ -280,7 +307,7 @@ class _BootScreen extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Text(
-            'กำลังเชื่อมต่อ NIVATOON...',
+            'กำลังโหลด NIVATOON...',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
           ),
           SizedBox(height: 12),
@@ -289,91 +316,6 @@ class _BootScreen extends StatelessWidget {
             child: LinearProgressIndicator(color: Color(0xFF00DC64)),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ConnectionErrorView extends StatelessWidget {
-  const _ConnectionErrorView({
-    required this.url,
-    required this.detail,
-    required this.onRetry,
-    required this.onOpenSettings,
-  });
-
-  final String url;
-  final String? detail;
-  final VoidCallback onRetry;
-  final VoidCallback onOpenSettings;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const Icon(Icons.wifi_off_rounded, size: 56, color: Color(0xFF00A84B)),
-            const SizedBox(height: 14),
-            const Text(
-              'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ NIVATOON ได้',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'ปลายทางปัจจุบัน: $url\n'
-              'หากใช้มือถือจริง ให้ต่อ Wi-Fi วงเดียวกับคอมพิวเตอร์ (192.168.0.20:3000) '
-              'หรือเสียบสาย USB แล้วรัน adb reverse tcp:3000 tcp:3000',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 13, color: Colors.black54, height: 1.5),
-            ),
-            if (detail != null && detail!.isNotEmpty) ...<Widget>[
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFF1F2),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  detail!,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 11, color: Color(0xFFBE123C)),
-                ),
-              ),
-            ],
-            const SizedBox(height: 18),
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              alignment: WrapAlignment.center,
-              children: <Widget>[
-                FilledButton.icon(
-                  onPressed: onRetry,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF00DC64),
-                  ),
-                  icon: const Icon(Icons.refresh_rounded),
-                  label: const Text(
-                    'ลองเชื่อมต่อใหม่',
-                    style: TextStyle(fontWeight: FontWeight.w800),
-                  ),
-                ),
-                OutlinedButton.icon(
-                  onPressed: onOpenSettings,
-                  icon: const Icon(Icons.tune_rounded),
-                  label: const Text(
-                    'เปลี่ยนที่อยู่ Server URL',
-                    style: TextStyle(fontWeight: FontWeight.w800),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

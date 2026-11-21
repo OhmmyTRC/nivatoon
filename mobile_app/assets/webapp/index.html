@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>NIVATOON — Webtoon Platform (GitHub Storage & Firebase DB)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700;800;900&display=swap');
+    body {
+      font-family: 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    body.dark-theme { background-color: #09090b; color: #f4f4f5; }
+    body.dark-theme .bg-white { background-color: #121215 !important; color: #f4f4f5 !important; }
+    body.dark-theme .bg-zinc-50 { background-color: #18181b !important; }
+    body.dark-theme .text-zinc-950, body.dark-theme .text-zinc-900 { color: #f4f4f5 !important; }
+    body.dark-theme .border-zinc-200, body.dark-theme .border-zinc-100 { border-color: #27272a !important; }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-zinc-950">
+  <div id="app"></div>
+
+  <script>
+    const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/OhmmyTRC/nivatoon/main/public';
+    const FIREBASE_RTDB_URL = 'https://niva-421c2-default-rtdb.asia-southeast1.firebasedatabase.app/nivatoon_cloud';
+
+    const GENRE_THAI = {
+      action: 'แอ็กชัน',
+      fantasy: 'โรแมนซ์แฟนตาซี',
+      romance: 'โรแมนซ์',
+      drama: 'ดราม่า',
+      comedy: 'คอมเมดี้',
+      historical: 'ย้อนยุค',
+    };
+
+    const GENRE_FILTERS = [
+      { key: 'all', label: 'ทั้งหมด' },
+      { key: 'romance', label: 'โรแมนซ์' },
+      { key: 'fantasy', label: 'โรแมนซ์แฟนตาซี' },
+      { key: 'drama', label: 'ดราม่า' },
+      { key: 'action', label: 'แอ็กชัน' },
+      { key: 'comedy', label: 'คอมเมดี้' },
+      { key: 'historical', label: 'ย้อนยุค' },
+    ];
+
+    const SCHEDULE_TABS = ['จบบริบูรณ์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์', 'อาทิตย์'];
+
+    const COIN_PACKAGES = [
+      { id: 'pkg-35', coins: 120, bonus: 0, priceTHB: 35, badge: 'เริ่มต้น', qr: '../qr/qr-35.png' },
+      { id: 'pkg-79', coins: 280, bonus: 20, priceTHB: 79, badge: 'คุ้มค่า', qr: '../qr/qr-79.png' },
+      { id: 'pkg-149', coins: 550, bonus: 50, priceTHB: 149, badge: 'ยอดนิยม', qr: '../qr/qr-149.png' },
+      { id: 'pkg-299', coins: 1200, bonus: 150, priceTHB: 299, badge: 'ขายดี', qr: '../qr/qr-299.png' },
+      { id: 'pkg-599', coins: 2600, bonus: 400, priceTHB: 599, badge: 'VIP', qr: '../qr/qr-599.png' },
+      { id: 'pkg-1290', coins: 6000, bonus: 1200, priceTHB: 1290, badge: 'MEGA', qr: '../qr/qr-1290.png' },
+    ];
+
+    const PLUS_PACKAGE = {
+      id: 'plus-monthly',
+      coins: 300,
+      bonus: 0,
+      priceTHB: 129,
+      isPlus: true,
+      title: 'NIVATOON PLUS รายเดือน (+300 เหรียญ)',
+      qr: '../qr/qr-129.png',
+    };
+
+    function buildEpisodes(slug, folder) {
+      const sampleFallback = ['../comics/page-01.jpg', '../comics/page-02.jpg', '../comics/page-03.jpg', '../comics/page-04.jpg'];
+      return [
+        {
+          id: `${slug}-ep-1`,
+          chapterNumber: 1,
+          title: 'ตอนที่ 1 จุดเริ่มต้นแห่งโชคชะตา',
+          coinPrice: 0,
+          publishedAt: '3 วันที่แล้ว',
+          pages: [1,2,3,4].map(n => `${GITHUB_RAW_BASE}/comics/${folder}/ep-01/00${n}.jpg`),
+          fallbackPages: sampleFallback,
+        },
+        {
+          id: `${slug}-ep-2`,
+          chapterNumber: 2,
+          title: 'ตอนที่ 2 พลังที่ตื่นขึ้นในเงามืด',
+          coinPrice: 0,
+          publishedAt: '2 วันที่แล้ว',
+          pages: [1,2,3,4].map(n => `${GITHUB_RAW_BASE}/comics/${folder}/ep-02/00${n}.jpg`),
+          fallbackPages: sampleFallback,
+        },
+        {
+          id: `${slug}-ep-3`,
+          chapterNumber: 3,
+          title: 'ตอนที่ 3 พันธสัญญาเลือดและคมดาบ (ล่วงหน้า)',
+          coinPrice: 5,
+          publishedAt: '1 วันที่แล้ว',
+          pages: [1,2,3,4].map(n => `${GITHUB_RAW_BASE}/comics/${folder}/ep-03/00${n}.jpg`),
+          fallbackPages: sampleFallback,
+        },
+      ];
+    }
+
+    const INITIAL_SERIES = [
+      {
+        slug: 'Absolute-Regression-หวนคืนนิรันดร์กาล',
+        folder: '11Absolute-Regression-หวนคืนนิรันดร์กาล',
+        title: 'หวนคืนนิรันดร์กาล (Absolute Regression)',
+        sub: 'ABSOLUTE REGRESSION',
+        author: 'JANG YEONG-HUN / PARK JIN-HWAN',
+        origin: 'korea',
+        status: 'ongoing',
+        genres: ['action', 'fantasy', 'historical'],
+        rating: 4.95,
+        likes: '19.2M',
+        updateDay: 'ศุกร์',
+        coverUrl: `${GITHUB_RAW_BASE}/comics/${encodeURIComponent('11Absolute-Regression-หวนคืนนิรันดร์กาล')}/cover.jpg`,
+        fallbackCover: '../comics/11-absolute-regression-cover.jpg',
+        synopsis: 'คุณชายรองแห่งลัทธิมารผู้สูญเสียทุกสิ่งในศึกชี้ชะตา ใช้วิชาต้องห้ามย้อนเวลากลับมาสู่อดีตอีกครั้ง พร้อมความทรงจำและวรยุทธ์ระดับปรมาจารย์ (ครบ 34 หน้าเต็มจากคลัง GitHub)',
+        episodes: [
+          {
+            id: 'Absolute-Regression-หวนคืนนิรันดร์กาล-ep-1',
+            chapterNumber: 1,
+            title: 'ตอนที่ 1 หวนคืนสู่อดีตกาล (34 หน้าเต็ม)',
+            coinPrice: 0,
+            publishedAt: 'ล่าสุด',
+            pages: Array.from({ length: 34 }, (_, i) =>
+              `${GITHUB_RAW_BASE}/comics/${encodeURIComponent('11Absolute-Regression-หวนคืนนิรันดร์กาล')}/ep-01/Absolute-Regression-ep1-${i + 1}.jpg`
+            ),
+            fallbackPages: ['../comics/11-absolute-regression-cover.jpg', '../comics/page-01.jpg', '../comics/page-02.jpg', '../comics/page-03.jpg', '../comics/page-04.jpg'],
+          }
+        ]
+      },
+      {
+        slug: 'moonlit-sword',
+        folder: '01-moonlit-sword',
+        title: 'ดาบจันทราเหนือมหานคร',
+        sub: 'MOONLIT SWORD',
+        author: 'HANA STUDIO',
+        origin: 'korea',
+        status: 'ongoing',
+        genres: ['action', 'fantasy'],
+        rating: 4.9,
+        likes: '18.4M',
+        updateDay: 'ศุกร์',
+        coverUrl: '../comics/01-moonlit-sword-cover.jpg',
+        fallbackCover: '../comics/01-moonlit-sword-cover.jpg',
+        synopsis: 'มหานครที่ไม่มีใครเคยเห็นดวงจันทร์มานานร้อยปี จนกระทั่งคืนหนึ่ง “ยูนา” พบดาบโบราณที่ตอบสนองต่อแสงจันทร์ในความทรงจำของเธอ',
+        episodes: buildEpisodes('moonlit-sword', '01-moonlit-sword'),
+      },
+      {
+        slug: 'palace-bloom',
+        folder: '02-palace-bloom',
+        title: 'บุปผาซ่อนเล่ห์แห่งวังหลวง',
+        sub: 'PALACE BLOOM',
+        author: 'MEILIN ART',
+        origin: 'china',
+        status: 'ongoing',
+        genres: ['romance', 'fantasy', 'historical'],
+        rating: 4.8,
+        likes: '15.2M',
+        updateDay: 'เสาร์',
+        coverUrl: '../comics/02-palace-bloom-cover.jpg',
+        fallbackCover: '../comics/02-palace-bloom-cover.jpg',
+        synopsis: 'องค์หญิงผู้หวนคืนจากอนาคต วางหมากชิงบัลลังก์ท่ามกลางความรักและแผนลอบสังหารในราชสำนัก',
+        episodes: buildEpisodes('palace-bloom', '02-palace-bloom'),
+      },
+      {
+        slug: 'unrivaled-system',
+        folder: '03-unrivaled-system',
+        title: 'ระบบเทพไร้พ่ายทะลุมิติ',
+        sub: 'UNRIVALED SYSTEM',
+        author: 'K-TOON LAB',
+        origin: 'korea',
+        status: 'ongoing',
+        genres: ['action', 'fantasy'],
+        rating: 4.9,
+        likes: '24.7M',
+        updateDay: 'จันทร์',
+        coverUrl: '../comics/03-unrivaled-system-cover.jpg',
+        fallbackCover: '../comics/03-unrivaled-system-cover.jpg',
+        synopsis: 'จากแรงก์ F ผู้ถูกทอดทิ้งในดันเจี้ยน สู่ผู้ครอบครองหน้าต่างระบบระดับจักรพรรดิ',
+        episodes: buildEpisodes('unrivaled-system', '03-unrivaled-system'),
+      },
+      {
+        slug: 'reborn-as-demon',
+        folder: '04-reborn-as-demon',
+        title: 'จุติใหม่ในร่างจอมมารสวรรค์',
+        sub: 'REBORN AS DEMON',
+        author: 'RYUJI WORKS',
+        origin: 'china',
+        status: 'ongoing',
+        genres: ['action', 'fantasy', 'historical'],
+        rating: 4.7,
+        likes: '11.8M',
+        updateDay: 'พุธ',
+        coverUrl: '../comics/04-reborn-as-demon-cover.jpg',
+        fallbackCover: '../comics/04-reborn-as-demon-cover.jpg',
+        synopsis: 'ปรมาจารย์พรรคมารฟื้นคืนชีพในรอบร้อยปี พร้อมทวงคืนยุทธภพที่ถูกสำนักธรรมะยึดครอง',
+        episodes: buildEpisodes('reborn-as-demon', '04-reborn-as-demon'),
+      },
+      {
+        slug: 'letter-from-tomorrow',
+        folder: '05-letter-from-tomorrow',
+        title: 'จดหมายรักจากวันพรุ่งนี้',
+        sub: 'LETTER FROM TOMORROW',
+        author: 'SORA',
+        origin: 'japan',
+        status: 'ongoing',
+        genres: ['romance', 'drama'],
+        rating: 4.8,
+        likes: '11.3M',
+        updateDay: 'อาทิตย์',
+        coverUrl: '../comics/05-letter-from-tomorrow-cover.jpg',
+        fallbackCover: '../comics/05-letter-from-tomorrow-cover.jpg',
+        synopsis: 'เมื่อตู้ไปรษณีย์เก่าหลังโรงเรียนส่งจดหมายจากตัวเธอเองในอีก 10 ปีข้างหน้า',
+        episodes: buildEpisodes('letter-from-tomorrow', '05-letter-from-tomorrow'),
+      },
+      {
+        slug: 'rank-zero-hunter',
+        folder: '06-rank-zero-hunter',
+        title: 'ฮันเตอร์แรงก์ศูนย์ผู้กลืนกินเงา',
+        sub: 'RANK ZERO HUNTER',
+        author: 'APEX RED',
+        origin: 'korea',
+        status: 'ongoing',
+        genres: ['action', 'fantasy'],
+        rating: 4.9,
+        likes: '16.9M',
+        updateDay: 'พฤหัส',
+        coverUrl: '../comics/06-rank-zero-hunter-cover.jpg',
+        fallbackCover: '../comics/06-rank-zero-hunter-cover.jpg',
+        synopsis: 'เกตระดับ S เปิดขึ้นใจกลางกรุงเทพฯ มีเพียงฮันเตอร์นอกสารบบคนเดียวที่ปิดมันได้',
+        episodes: buildEpisodes('rank-zero-hunter', '06-rank-zero-hunter'),
+      },
+      {
+        slug: 'eclipse-academy',
+        folder: '07-eclipse-academy',
+        title: 'โรงเรียนเวทมนตร์จันทรุปราคา',
+        sub: 'ECLIPSE ACADEMY',
+        author: 'LUNA',
+        origin: 'korea',
+        status: 'ongoing',
+        genres: ['fantasy', 'drama'],
+        rating: 4.8,
+        likes: '14.2M',
+        updateDay: 'อังคาร',
+        coverUrl: '../comics/07-eclipse-academy-cover.jpg',
+        fallbackCover: '../comics/07-eclipse-academy-cover.jpg',
+        synopsis: 'ความลับของหอคอยต้องห้ามในสถาบันเวทมนตร์ที่เปิดออกทุกคืนจันทรุปราคา',
+        episodes: buildEpisodes('eclipse-academy', '07-eclipse-academy'),
+      },
+      {
+        slug: 'shadow-apothecary',
+        folder: '08-shadow-apothecary',
+        title: 'หมอยาเงาแห่งหุบเขาพันพิษ',
+        sub: 'SHADOW APOTHECARY',
+        author: 'YUN',
+        origin: 'china',
+        status: 'ongoing',
+        genres: ['historical', 'drama', 'fantasy'],
+        rating: 4.8,
+        likes: '16.1M',
+        updateDay: 'ศุกร์',
+        coverUrl: '../comics/08-shadow-apothecary-cover.jpg',
+        fallbackCover: '../comics/08-shadow-apothecary-cover.jpg',
+        synopsis: 'หมอยาพเนจรผู้ปรุงโอสถถอนพิษแลกกับความทรงจำของผู้ป่วย',
+        episodes: buildEpisodes('shadow-apothecary', '08-shadow-apothecary'),
+      },
+      {
+        slug: 'neon-shinjuku-99',
+        folder: '09-neon-shinjuku-99',
+        title: 'นีออนชินจูกุ 2099',
+        sub: 'NEON SHINJUKU 99',
+        author: 'CYBER INK',
+        origin: 'japan',
+        status: 'ongoing',
+        genres: ['action', 'drama'],
+        rating: 4.9,
+        likes: '13.4M',
+        updateDay: 'เสาร์',
+        coverUrl: '../comics/09-neon-shinjuku-99-cover.jpg',
+        fallbackCover: '../comics/09-neon-shinjuku-99-cover.jpg',
+        synopsis: 'นักสืบไซบอร์กตามล่าวิญญาณดิจิทัลที่หลุดออกจากโครงข่ายประสาทเทียม',
+        episodes: buildEpisodes('neon-shinjuku-99', '09-neon-shinjuku-99'),
+      },
+      {
+        slug: 'duchess-contract',
+        folder: '10-duchess-contract',
+        title: 'สัญญาวิวาห์ของดัชเชสเลือดเย็น',
+        sub: 'DUCHESS CONTRACT',
+        author: 'CLAIRE',
+        origin: 'korea',
+        status: 'completed',
+        genres: ['romance', 'fantasy'],
+        rating: 4.9,
+        likes: '21.5M',
+        updateDay: 'จบบริบูรณ์',
+        coverUrl: '../comics/10-duchess-contract-cover.jpg',
+        fallbackCover: '../comics/10-duchess-contract-cover.jpg',
+        synopsis: 'วิวาห์ลวงระหว่างดัชเชสผู้กุมอำนาจกองทัพเหนือกับแกรนด์ดยุกผู้ต้องคำสาป',
+        episodes: buildEpisodes('duchess-contract', '10-duchess-contract'),
+      },
+    ];
+
+    const state = {
+      route: 'home', // home | schedule | ranking | discover | canvas | library | series | reader | wallet | profile | studio | admin
+      seriesSlug: 'Absolute-Regression-หวนคืนนิรันดร์กาล',
+      chapterNum: 1,
+      slideIdx: 0,
+      homeGenre: 'all',
+      scheduleTopTab: 'daily',
+      scheduleDay: 'ศุกร์',
+      scheduleGenre: 'all',
+      rankingTab: 'hot',
+      seriesTab: 'episodes',
+      profileTab: 'profile',
+      adminTab: 'overview',
+      searchQuery: '',
+      showPromoModal: false,
+      showNotifMenu: false,
+      showAiOverlay: false,
+      autoScrollSpeed: 0,
+      paymentModalPkg: null,
+      paymentProvider: 'promptpay',
+      paymentSlipName: '',
+      paymentSlipRef: '',
+      paymentResult: null,
+      authMode: 'login', // login | register | forgot
+      authError: '',
+      authInfo: '',
+      pinUnlocked: false,
+      pinError: '',
+      cloudSyncedAt: 'เชื่อมต่อ Firebase (niva-421c2) & GitHub แล้ว',
+      seriesList: INITIAL_SERIES,
+      users: [
+        {
+          id: 'user-reader-demo',
+          email: 'reader@gmail.com',
+          password: 'Reader2026!',
+          pin: '123456',
+          role: 'user',
+          creatorStatus: 'none',
+          displayName: 'เคนจิ นักอ่านสายแอ็กชัน',
+          bio: 'ชอบแนวระบบเทพ ดันเจี้ยน และโรแมนซ์แฟนตาซี',
+          avatarFrame: 'emerald',
+          bannerTheme: 'midnight',
+          coinBalance: 0,
+          freePassTickets: 3,
+          plan: 'free',
+          checkinDay: 1,
+          lastCheckinDate: '',
+          darkMode: false,
+          librarySlugs: ['Absolute-Regression-หวนคืนนิรันดร์กาล', 'moonlit-sword', 'unrivaled-system'],
+          unlockedChapterIds: [],
+          readingHistory: [{ seriesSlug: 'Absolute-Regression-หวนคืนนิรันดร์กาล', chapterNumber: 1, percent: 80 }],
+          transactions: [],
+        },
+        {
+          id: 'user-creator-hana',
+          email: 'creator@nivatoon.app',
+          password: 'Creator2026!',
+          pin: '123456',
+          role: 'creator',
+          creatorStatus: 'approved',
+          displayName: 'HANA STUDIO (ครีเอเตอร์)',
+          bio: 'นักวาดมังฮวาออริจินัลเรื่อง ดาบจันทราเหนือมหานคร',
+          avatarFrame: 'neon',
+          bannerTheme: 'emerald',
+          coinBalance: 1450,
+          freePassTickets: 5,
+          plan: 'plus',
+          checkinDay: 3,
+          lastCheckinDate: '',
+          darkMode: false,
+          librarySlugs: ['moonlit-sword'],
+          unlockedChapterIds: [],
+          readingHistory: [{ seriesSlug: 'moonlit-sword', chapterNumber: 1, percent: 100 }],
+          transactions: [{ id: 'tx-1', reference: 'PP-20261121-001', title: 'เติมเหรียญ +6,000 พอยน์ (PromptPay)', coins: 6000, amountTHB: 1290, createdAt: '2026-11-21' }],
+        },
+        {
+          id: 'user-admin',
+          email: 'admin@nivatoon.app',
+          password: 'NivaAdmin2026!',
+          pin: '123456',
+          role: 'admin',
+          creatorStatus: 'approved',
+          displayName: 'แอดมินระบบ NIVATOON',
+          bio: 'ผู้ดูแลระบบและอนุมัติสิทธิ์ครีเอเตอร์',
+          avatarFrame: 'gold',
+          bannerTheme: 'midnight',
+          coinBalance: 9999,
+          freePassTickets: 99,
+          plan: 'plus',
+          checkinDay: 7,
+          lastCheckinDate: '',
+          darkMode: false,
+          librarySlugs: ['Absolute-Regression-หวนคืนนิรันดร์กาล', 'moonlit-sword'],
+          unlockedChapterIds: [],
+          readingHistory: [{ seriesSlug: 'Absolute-Regression-หวนคืนนิรันดร์กาล', chapterNumber: 1, percent: 100 }],
+          transactions: [],
+        },
+      ],
+      currentUser: null,
+      notifications: [
+        { id: 'notif-1', badge: 'EVENT', title: 'เช็กอิน 7 วัน รับตั๋วอ่านฟรีรวม 9 ใบ!', message: 'เช็กอินวันที่ 1–6 รับวันละ 1 ตั๋ว พิเศษวันที่ 7 รับ 3 ตั๋วอ่านฟรีทันที', isRead: false },
+        { id: 'notif-2', badge: 'PROMO', title: 'แพ็กเกจ NIVATOON PLUS ฿129 (+300 เหรียญ)', message: 'อ่านตอนล่วงหน้าฟรีทุกเรื่องพร้อมโบนัส 300 เหรียญ ชำระผ่าน PromptPay หรือ TrueMoney', isRead: false },
+      ],
+      comments: [
+        { id: 'c-1', seriesSlug: 'Absolute-Regression-หวนคืนนิรันดร์กาล', chapterNumber: 1, authorName: 'เคนจิ นักอ่านสายแอ็กชัน', badge: 'TOP', body: 'ตอนที่ 1 เปิดเรื่องมาดีมาก ลายเส้นคมกริบ! แนะนำเปิดโหมด Auto-Scroll 1.5x ครับ', likes: 980 },
+        { id: 'c-2', seriesSlug: 'moonlit-sword', chapterNumber: 1, authorName: 'HANA STUDIO (ครีเอเตอร์)', badge: 'CREATOR', body: 'ขอบคุณทุกคนที่ติดตามนะครับ ตอนใหม่ลงทุกวันศุกร์เหมือนเดิม!', likes: 1420 },
+      ],
+      creatorRequests: [
+        { id: 'creq-seed-1', email: 'reader@gmail.com', displayName: 'เคนจิ นักอ่านสายแอ็กชัน', penName: 'KENJI INK STUDIO', sampleTitle: 'ดาบมังกรข้ามมิติ (Dragon Dimension)', synopsis: 'มีต้นฉบับมังฮวาแนวแอ็กชันแฟนตาซีวาดไว้ 5 ตอน พร้อมลงรายสัปดาห์ทุกวันศุกร์ครับ', coverUrl: '../comics/06-rank-zero-hunter-cover.jpg', status: 'pending' },
+      ],
+      issues: [],
+      usedSlipRefs: new Set(),
+    };
+
+    async function syncFromCloud() {
+      try {
+        const res = await fetch(`${FIREBASE_RTDB_URL}.json`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.comments) {
+            Object.values(data.comments).forEach(c => {
+              if (c && c.id && !state.comments.some(x => x.id === c.id)) {
+                state.comments.unshift({
+                  id: c.id,
+                  seriesSlug: c.series_slug || 'moonlit-sword',
+                  chapterNumber: Number(c.chapter_number || 1),
+                  authorName: c.author_name || 'นักอ่าน NIVATOON',
+                  badge: c.author_badge || 'MEMBER',
+                  body: c.body || '',
+                  likes: Number(c.likes || 1),
+                });
+              }
+            });
+          }
+          if (data && data.notifications) {
+            Object.values(data.notifications).forEach(n => {
+              if (n && n.id && !state.notifications.some(x => x.id === n.id)) {
+                state.notifications.unshift({
+                  id: n.id,
+                  badge: n.badge || 'PROMO',
+                  title: n.title || '',
+                  message: n.message || '',
+                  isRead: false,
+                });
+              }
+            });
+          }
+          state.cloudSyncedAt = 'ซิงก์ Firebase (niva-421c2) & GitHub ล่าสุด ✓';
+          render();
+        }
+      } catch (_) {}
+    }
+
+    async function pushToFirebase(collection, docId, payload) {
+      try {
+        const safeKey = String(docId).replace(/[.#$/\[\]]/g, '_');
+        await fetch(`${FIREBASE_RTDB_URL}/${collection}/${safeKey}.json`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...payload, syncedAt: new Date().toISOString() }),
+        });
+      } catch (_) {}
+    }
+
+    function navigate(route, extra = {}) {
+      Object.assign(state, { route, showNotifMenu: false, ...extra });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      render();
+    }
+
+    function renderTicketIcon(cls = 'size-5') {
+      return `<span class="inline-grid ${cls} place-items-center rounded-md bg-[#00dc64] text-white shadow-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="size-3.5"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1a2 2 0 0 0 0 4v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1a2 2 0 0 0 0-4V9Z"/><path d="M10 7v10"/></svg></span>`;
+    }
+
+    function renderCoinIcon(cls = 'size-5') {
+      return `<span class="inline-grid ${cls} place-items-center rounded-full bg-gradient-to-br from-amber-300 via-yellow-400 to-amber-500 text-[10px] font-black text-amber-950 ring-1 ring-amber-600/40 shadow-sm">C</span>`;
+    }
+
+    function renderHeader() {
+      const u = state.currentUser;
+      const unread = state.notifications.filter(n => !n.isRead).length;
+      return `
+        <header class="sticky top-0 z-40 border-b border-zinc-200 bg-white/95 backdrop-blur">
+          <div class="mx-auto flex h-14 max-w-[1280px] items-center gap-2 px-3 sm:h-16 sm:gap-3 sm:px-5 lg:px-8">
+            <button onclick="navigate('home')" class="flex shrink-0 items-center gap-1.5 text-lg font-black tracking-tight text-zinc-950 sm:gap-2 sm:text-xl">
+              <span class="grid size-7 place-items-center rounded-lg bg-[#00dc64] text-sm font-black text-white shadow-sm sm:size-8 sm:text-base">N</span>
+              <span>NIVATOON</span>
+            </button>
+
+            <nav class="ml-2 hidden shrink-0 items-center gap-4 whitespace-nowrap text-sm font-bold text-zinc-600 md:flex">
+              <button onclick="navigate('home')" class="${state.route === 'home' ? 'font-black text-zinc-950' : 'hover:text-zinc-950'}">หน้าหลัก</button>
+              <button onclick="navigate('schedule')" class="${state.route === 'schedule' ? 'font-black text-zinc-950' : 'hover:text-zinc-950'}">ประจำวัน</button>
+              <button onclick="navigate('ranking')" class="${state.route === 'ranking' ? 'font-black text-zinc-950' : 'hover:text-zinc-950'}">อันดับ</button>
+              <button onclick="navigate('canvas')" class="${state.route === 'canvas' ? 'font-black text-zinc-950' : 'hover:text-zinc-950'}">CANVAS</button>
+              <button onclick="navigate('library')" class="${state.route === 'library' ? 'font-black text-zinc-950' : 'hover:text-zinc-950'}">เว็บตูนของฉัน</button>
+            </nav>
+
+            <div class="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
+              ${(u.role === 'creator' || u.role === 'admin') ? `
+                <button onclick="navigate('studio')" class="rounded-full bg-[#00dc64]/15 px-2.5 py-1.5 text-[11px] font-black text-[#009944]">+ อัพผลงาน</button>
+              ` : ''}
+              ${u.role === 'admin' ? `
+                <button onclick="navigate('admin')" class="rounded-full bg-zinc-950 px-2.5 py-1.5 text-[11px] font-black text-[#00dc64]">Admin</button>
+              ` : ''}
+
+              <div class="relative">
+                <button onclick="toggleNotif()" class="relative grid size-8 place-items-center rounded-full border border-zinc-200 bg-white text-zinc-700">
+                  🔔
+                  ${unread > 0 ? `<span class="absolute -right-0.5 -top-0.5 grid size-4 place-items-center rounded-full bg-rose-500 text-[9px] font-black text-white">${unread}</span>` : ''}
+                </button>
+                ${state.showNotifMenu ? `
+                  <div class="fixed inset-x-3 top-16 z-50 rounded-2xl border border-zinc-200 bg-white p-4 shadow-2xl sm:absolute sm:inset-x-auto sm:right-0 sm:top-10 sm:w-80">
+                    <div class="flex items-center justify-between border-b border-zinc-100 pb-2">
+                      <b class="text-sm font-black">แจ้งเตือน & โปรโมชั่น</b>
+                      <span class="text-[11px] font-bold text-[#00a84b]">อ่านแล้ว ✓</span>
+                    </div>
+                    <div class="mt-2 space-y-2 max-h-64 overflow-y-auto">
+                      ${state.notifications.map(n => `
+                        <div class="rounded-xl border border-zinc-100 bg-zinc-50 p-2.5 text-xs">
+                          <span class="rounded bg-[#00dc64] px-1.5 py-0.5 text-[9px] font-black text-white">${n.badge}</span>
+                          <b class="mt-1 block font-black text-zinc-950">${n.title}</b>
+                          <p class="mt-0.5 text-[11px] text-zinc-600">${n.message}</p>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
+
+              <button onclick="state.showPromoModal = true; render();" class="flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-black text-emerald-900">
+                ${renderTicketIcon('size-4')}
+                <span>${u.freePassTickets}</span>
+              </button>
+
+              <button onclick="navigate('wallet')" class="flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-black text-amber-900">
+                ${renderCoinIcon('size-4')}
+                <span>${u.coinBalance}</span>
+              </button>
+
+              <button onclick="navigate('profile')" class="grid size-8 place-items-center rounded-full bg-zinc-950 text-xs font-black text-[#00dc64] ring-2 ring-[#00dc64]">
+                ${u.displayName.slice(0, 1).toUpperCase()}
+              </button>
+            </div>
+          </div>
+        </header>
+      `;
+    }
+
+    function renderBottomNav() {
+      const items = [
+        ['home', '🏠', 'หน้าหลัก'],
+        ['schedule', '📅', 'ประจำวัน'],
+        ['ranking', '🏆', 'อันดับ'],
+        ['canvas', '🎨', 'CANVAS'],
+        ['profile', '👤', 'โปรไฟล์'],
+      ];
+      return `
+        <nav class="fixed inset-x-0 bottom-0 z-40 flex h-16 items-center justify-around border-t border-zinc-200 bg-white/95 px-2 backdrop-blur md:hidden">
+          ${items.map(([key, icon, label]) => `
+            <button onclick="navigate('${key}')" class="flex flex-col items-center gap-0.5 text-[11px] font-bold ${state.route === key ? 'text-[#00a84b] font-black' : 'text-zinc-500'}">
+              <span class="text-base">${icon}</span>
+              <span>${label}</span>
+            </button>
+          `).join('')}
+        </nav>
+      `;
+    }
+
+    function renderComicCard(item, index, rankBadge = false) {
+      const genre = GENRE_THAI[item.genres[0] || 'action'] || 'แอ็กชัน';
+      return `
+        <div onclick="navigate('series', { seriesSlug: '${item.slug}' })" class="group cursor-pointer block">
+          <div class="relative aspect-[3/4] overflow-hidden rounded-xl bg-zinc-200 shadow-sm">
+            <img src="${item.coverUrl}" onerror="this.onerror=null;this.src='${item.fallbackCover}';" alt="${item.title}" class="size-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent"></div>
+            <div class="absolute left-2 top-2 flex items-center gap-1">
+              <span class="rounded bg-[#00dc64] px-1.5 py-0.5 text-[10px] font-black text-white shadow-sm">
+                ${item.status === 'completed' ? 'จบแล้ว' : 'ตอนใหม่'}
+              </span>
+            </div>
+            ${rankBadge ? `<span class="absolute bottom-1.5 right-2.5 text-3xl font-black italic text-white drop-shadow">${index + 1}</span>` : ''}
+          </div>
+          <p class="mt-2 text-[11px] font-medium text-zinc-400">${genre}</p>
+          <h3 class="line-clamp-1 text-sm font-bold text-zinc-950 group-hover:text-[#00a84b]">${item.title}</h3>
+          <div class="mt-0.5 flex items-center gap-1 text-[11px] font-bold text-[#00c75a]">
+            <span>♥</span>
+            <span>${item.likes}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderHome() {
+      const u = state.currentUser;
+      const slides = state.seriesList.slice(0, 5);
+      const hero = slides[state.slideIdx % slides.length] || state.seriesList[0];
+      const filtered = state.homeGenre === 'all'
+        ? state.seriesList
+        : state.seriesList.filter(s => s.genres.includes(state.homeGenre));
+      const todayKey = new Date().toISOString().slice(0, 10);
+      const checkedInToday = u.lastCheckinDate === todayKey;
+      const nextDay = (u.checkinDay % 7) + 1;
+      const nextReward = nextDay === 7 ? 3 : 1;
+      const lastRead = u.readingHistory[0];
+      const lastSeries = state.seriesList.find(s => s.slug === lastRead?.seriesSlug) || state.seriesList[0];
+
+      return `
+        <main class="mx-auto max-w-[1280px] space-y-8 px-3 py-4 pb-24 sm:px-4 md:pb-8 lg:px-8">
+          <!-- Hero Spotlight Carousel (1:1 identical to localhost:3000) -->
+          <section class="relative overflow-hidden rounded-2xl bg-zinc-950 text-white shadow-lg">
+            <img src="${hero.coverUrl}" onerror="this.onerror=null;this.src='${hero.fallbackCover}';" alt="${hero.title}" class="absolute inset-0 size-full object-cover object-center opacity-55" />
+            <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/65 to-transparent"></div>
+            <div class="relative z-10 grid min-h-[320px] items-center gap-6 p-6 md:min-h-[400px] md:grid-cols-[1.3fr_0.7fr] md:p-12">
+              <div class="max-w-xl">
+                <div class="mb-3 flex flex-wrap items-center gap-2">
+                  <span class="rounded bg-[#00dc64] px-2.5 py-0.5 text-[11px] font-black text-white">แนะนำประจำสัปดาห์</span>
+                  <span class="rounded bg-white/15 px-2.5 py-0.5 text-[11px] font-bold">${GENRE_THAI[hero.genres[0]] || 'แอ็กชัน'}</span>
+                  <span class="rounded bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold text-emerald-300">☁️ ${state.cloudSyncedAt}</span>
+                </div>
+                <h1 class="text-2xl font-black leading-tight sm:text-3xl md:text-5xl">${hero.title}</h1>
+                <p class="mt-2 text-xs font-bold text-white/70">โดย ${hero.author} • อัปเดตทุกวัน${hero.updateDay}</p>
+                <p class="mt-3 line-clamp-2 max-w-lg text-xs sm:text-sm leading-6 text-white/80">${hero.synopsis}</p>
+                <div class="mt-5 flex flex-wrap gap-2.5">
+                  <button onclick="openChapter('${hero.slug}', 1, 0, '${hero.slug}-ep-1', false)" class="flex items-center gap-1.5 rounded-full bg-[#00dc64] px-6 py-2.5 text-sm font-black text-white shadow-sm">
+                    ▶ อ่านตอนแรก
+                  </button>
+                  <button onclick="navigate('series', { seriesSlug: '${hero.slug}' })" class="rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-sm font-bold backdrop-blur">
+                    รายละเอียด
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="absolute bottom-4 right-5 z-10 flex items-center gap-2">
+              ${slides.map((s, i) => `
+                <button onclick="state.slideIdx = ${i}; render();" class="h-2 rounded-full transition-all ${i === state.slideIdx ? 'w-6 bg-[#00dc64]' : 'w-2 bg-white/40'}"></button>
+              `).join('')}
+            </div>
+          </section>
+
+          <!-- Curated Picks with Genre Filter Chips -->
+          <section>
+            <div class="mb-4 flex items-center justify-between">
+              <h2 class="text-lg font-black tracking-tight text-zinc-950 md:text-2xl">เรื่องเด็ดน่าติดตาม</h2>
+              <button onclick="navigate('schedule')" class="text-xs font-bold text-zinc-500">ดูทั้งหมด →</button>
+            </div>
+            <div class="no-scrollbar mb-5 flex gap-2 overflow-x-auto pb-1">
+              ${GENRE_FILTERS.map(g => `
+                <button onclick="state.homeGenre = '${g.key}'; render();" class="shrink-0 rounded-full px-4 py-1.5 text-xs font-bold transition ${state.homeGenre === g.key ? 'bg-zinc-950 text-white' : 'border border-zinc-200 bg-white text-zinc-600'}">
+                  ${g.label}
+                </button>
+              `).join('')}
+            </div>
+            <div class="grid grid-cols-2 gap-x-3.5 gap-y-6 sm:grid-cols-3 md:grid-cols-5">
+              ${filtered.map((item, i) => renderComicCard(item, i)).join('')}
+            </div>
+          </section>
+
+          <!-- 7-Day Free Ticket Check-In Banner -->
+          <section class="overflow-hidden rounded-2xl bg-gradient-to-r from-[#00dc64] via-[#00e676] to-[#69f0ae] p-5 text-zinc-950 shadow-sm md:p-7">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <div class="grid size-14 shrink-0 place-items-center rounded-2xl bg-white shadow-sm">
+                  ${renderTicketIcon('size-8')}
+                </div>
+                <div>
+                  <span class="rounded bg-zinc-950 px-2 py-0.5 text-[10px] font-black text-[#00dc64]">เช็กอินรับตั๋วอ่านฟรี 7 วัน</span>
+                  <h2 class="mt-1 text-lg font-black md:text-2xl">เช็กอินวันที่ 1–6 รับ 1 ตั๋ว • พิเศษวันที่ 7 รับ 3 ตั๋วอ่านฟรี!</h2>
+                  <p class="text-xs font-bold text-zinc-900/80">ความคืบหน้ารอบนี้: วันที่ ${u.checkinDay}/7 • ตั๋วอ่านฟรีคงเหลือ ${u.freePassTickets} ใบ</p>
+                </div>
+              </div>
+              <button onclick="state.showPromoModal = true; render();" class="rounded-full bg-white px-5 py-2.5 text-xs font-black text-zinc-950 shadow-sm">
+                ${checkedInToday ? 'เช็กอินวันนี้แล้ว ✓' : `เช็กอินรับ +${nextReward} ตั๋ว`}
+              </button>
+            </div>
+          </section>
+
+          <!-- Continue Reading Card -->
+          <section class="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <div class="size-16 shrink-0 overflow-hidden rounded-lg bg-zinc-200">
+                  <img src="${lastSeries.coverUrl}" onerror="this.onerror=null;this.src='${lastSeries.fallbackCover}';" class="size-full object-cover" />
+                </div>
+                <div>
+                  <p class="text-[11px] font-black text-[#00a84b]">อ่านต่อจากที่ค้างไว้</p>
+                  <h3 class="text-base font-black text-zinc-950">${lastSeries.title}</h3>
+                  <p class="text-xs text-zinc-500">Ep.${lastRead?.chapterNumber || 1} • อ่านไปแล้ว ${lastRead?.percent || 80}%</p>
+                </div>
+              </div>
+              <button onclick="openChapter('${lastSeries.slug}', ${lastRead?.chapterNumber || 1}, 0, '${lastSeries.slug}-ep-1', false)" class="rounded-full bg-zinc-950 px-5 py-2.5 text-xs font-black text-white">
+                ดำเนินอ่านต่อ →
+              </button>
+            </div>
+          </section>
+
+          <!-- Popular Ranking Preview -->
+          <section>
+            <div class="mb-4 flex items-center justify-between">
+              <h2 class="text-lg font-black tracking-tight text-zinc-950 md:text-2xl">อันดับยอดนิยมประจำวัน</h2>
+              <button onclick="navigate('ranking')" class="text-xs font-bold text-zinc-500">ดูทั้งหมด →</button>
+            </div>
+            <div class="divide-y divide-zinc-100 rounded-2xl border border-zinc-200 bg-white px-4">
+              ${state.seriesList.slice(0, 6).map((item, idx) => `
+                <div onclick="navigate('series', { seriesSlug: '${item.slug}' })" class="flex cursor-pointer items-center gap-4 py-3.5">
+                  <span class="w-6 text-center text-lg font-black text-zinc-900">${idx + 1}</span>
+                  <div class="size-14 shrink-0 overflow-hidden rounded-lg bg-zinc-100">
+                    <img src="${item.coverUrl}" onerror="this.onerror=null;this.src='${item.fallbackCover}';" class="size-full object-cover" />
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <b class="block truncate text-sm text-zinc-950">${item.title}</b>
+                    <p class="text-xs text-zinc-400">${GENRE_THAI[item.genres[0]] || 'แอ็กชัน'} • โดย ${item.author}</p>
+                  </div>
+                  <div class="text-right text-xs font-bold text-[#00c75a]">♥ ${item.likes}</div>
+                </div>
+              `).join('')}
+            </div>
+          </section>
+        </main>
+      `;
+    }
+
+    function renderSchedule() {
+      const visible = state.scheduleTopTab === 'genre'
+        ? (state.scheduleGenre === 'all' ? state.seriesList : state.seriesList.filter(s => s.genres.includes(state.scheduleGenre)))
+        : (state.scheduleDay === 'จบบริบูรณ์' ? state.seriesList.filter(s => s.status === 'completed') : state.seriesList.filter(s => s.updateDay.includes(state.scheduleDay)));
+      const list = visible.length > 0 ? visible : state.seriesList;
+      return `
+        <main class="mx-auto min-h-[75vh] max-w-[1280px] px-3 py-5 pb-24 sm:px-4">
+          <div class="flex items-center justify-between border-b border-zinc-200 pb-4">
+            <div class="flex items-center gap-6 text-xl font-black">
+              <button onclick="state.scheduleTopTab='daily';render();" class="${state.scheduleTopTab === 'daily' ? 'text-zinc-950' : 'text-zinc-300'}">ประจำวัน</button>
+              <button onclick="state.scheduleTopTab='genre';render();" class="${state.scheduleTopTab === 'genre' ? 'text-zinc-950' : 'text-zinc-300'}">หมวดหมู่</button>
+            </div>
+            <button onclick="navigate('ranking')" class="grid size-10 place-items-center rounded-full border border-zinc-200">🏆</button>
+          </div>
+          ${state.scheduleTopTab === 'daily' ? `
+            <div class="no-scrollbar mt-3 flex gap-2 overflow-x-auto border-b border-zinc-100 pb-3">
+              ${SCHEDULE_TABS.map(day => `
+                <button onclick="state.scheduleDay='${day}';render();" class="shrink-0 border-b-2 px-3 py-1.5 text-sm font-bold ${state.scheduleDay === day ? 'border-zinc-950 font-black text-zinc-950' : 'border-transparent text-zinc-400'}">${day}</button>
+              `).join('')}
+            </div>
+          ` : `
+            <div class="mt-3 flex flex-wrap gap-2 pb-3">
+              ${GENRE_FILTERS.map(g => `
+                <button onclick="state.scheduleGenre='${g.key}';render();" class="rounded-full px-4 py-1.5 text-xs font-bold ${state.scheduleGenre === g.key ? 'bg-zinc-950 text-white' : 'border border-zinc-200 bg-white text-zinc-600'}">${g.label}</button>
+              `).join('')}
+            </div>
+          `}
+          <div class="mt-4 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-5">
+            ${list.map((item, i) => renderComicCard(item, i)).join('')}
+          </div>
+        </main>
+      `;
+    }
+
+    function renderRanking() {
+      return `
+        <main class="mx-auto min-h-[75vh] max-w-[1280px] px-3 py-5 pb-24 sm:px-4">
+          <h1 class="text-2xl font-black">อันดับยอดนิยมประจำสัปดาห์</h1>
+          <p class="mt-1 text-xs text-zinc-500">จัดอันดับจากยอดผู้อ่านและคะแนนความนิยมบนฐานข้อมูล Firebase (niva-421c2)</p>
+          <div class="mt-5 grid grid-cols-2 gap-x-3.5 gap-y-6 sm:grid-cols-3 md:grid-cols-5">
+            ${state.seriesList.map((item, i) => renderComicCard(item, i, true)).join('')}
+          </div>
+        </main>
+      `;
+    }
+
+    function renderSeriesDetail() {
+      const u = state.currentUser;
+      const series = state.seriesList.find(s => s.slug === state.seriesSlug) || state.seriesList[0];
+      const inLib = u.librarySlugs.includes(series.slug);
+      return `
+        <main class="mx-auto max-w-[960px] pb-24">
+          <div class="flex items-center justify-between px-4 py-4">
+            <button onclick="navigate('home')" class="grid size-9 place-items-center rounded-full hover:bg-zinc-100">←</button>
+            <div class="flex items-center gap-2">
+              <button onclick="toggleLibrary('${series.slug}')" class="rounded-full px-4 py-1.5 text-xs font-black ${inLib ? 'bg-[#00dc64] text-white' : 'border border-zinc-300 bg-white text-zinc-900'}">
+                ${inLib ? '✓ กำลังติดตาม' : '+ ติดตาม'}
+              </button>
+            </div>
+          </div>
+
+          <section class="flex flex-col items-center gap-5 px-4 text-center sm:flex-row sm:items-start sm:text-left">
+            <div class="w-40 shrink-0 overflow-hidden rounded-2xl border border-zinc-200 shadow-lg">
+              <img src="${series.coverUrl}" onerror="this.onerror=null;this.src='${series.fallbackCover}';" class="aspect-[3/4] w-full object-cover" />
+            </div>
+            <div class="flex-1">
+              <span class="rounded-full bg-[#00dc64]/15 px-3 py-1 text-xs font-black text-[#008f42]">${GENRE_THAI[series.genres[0]] || 'แอ็กชัน'} • อัปเดตวัน${series.updateDay}</span>
+              <h1 class="mt-2 text-2xl font-black sm:text-3xl">${series.title}</h1>
+              <p class="mt-1 text-xs font-bold text-zinc-500">โดย ${series.author} • ★ ${series.rating} • ♥ ${series.likes}</p>
+              <p class="mt-3 text-xs leading-6 text-zinc-600">${series.synopsis}</p>
+              <div class="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start">
+                <button onclick="openChapter('${series.slug}', 1, 0, '${series.episodes[0].id}', false)" class="rounded-full bg-[#00dc64] px-6 py-2.5 text-xs font-black text-white shadow-sm">
+                  เริ่มอ่านตอนที่ 1
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <div class="mt-6 flex border-b border-zinc-200 px-4 text-sm font-black">
+            <button onclick="state.seriesTab='preview';render();" class="flex-1 border-b-2 py-3 ${state.seriesTab === 'preview' ? 'border-zinc-950 text-zinc-950' : 'border-transparent text-zinc-400'}">ตัวอย่างในตอน</button>
+            <button onclick="state.seriesTab='episodes';render();" class="flex-1 border-b-2 py-3 ${state.seriesTab === 'episodes' ? 'border-zinc-950 text-zinc-950' : 'border-transparent text-zinc-400'}">ตอน (${series.episodes.length})</button>
+            <button onclick="state.seriesTab='similar';render();" class="flex-1 border-b-2 py-3 ${state.seriesTab === 'similar' ? 'border-zinc-950 text-zinc-950' : 'border-transparent text-zinc-400'}">เรื่องที่คล้ายกัน</button>
+          </div>
+
+          ${state.seriesTab === 'episodes' ? `
+            <div class="divide-y divide-zinc-100 px-4">
+              ${series.episodes.map(ep => {
+                const unlocked = ep.coinPrice === 0 || u.plan === 'plus' || u.unlockedChapterIds.includes(ep.id);
+                return `
+                  <div class="flex items-center justify-between gap-3 py-3.5">
+                    <div class="flex items-center gap-3 min-w-0">
+                      <img src="${ep.pages[0]}" onerror="this.onerror=null;this.src='${series.fallbackCover}';" class="h-14 w-20 shrink-0 rounded-lg object-cover bg-zinc-100" />
+                      <div class="min-w-0">
+                        <b class="block truncate text-sm text-zinc-950">Ep.${ep.chapterNumber} — ${ep.title}</b>
+                        <span class="text-xs text-zinc-400">${ep.publishedAt} • ${ep.pages.length} หน้า (GitHub Storage)</span>
+                      </div>
+                    </div>
+                    <div class="flex shrink-0 items-center gap-1.5">
+                      ${unlocked ? `
+                        <button onclick="openChapter('${series.slug}', ${ep.chapterNumber}, 0, '${ep.id}', false)" class="rounded-full border border-zinc-300 px-4 py-1.5 text-xs font-black">อ่าน</button>
+                      ` : `
+                        ${u.freePassTickets > 0 ? `
+                          <button onclick="openChapter('${series.slug}', ${ep.chapterNumber}, ${ep.coinPrice}, '${ep.id}', true)" class="flex items-center gap-1 rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-[11px] font-black text-emerald-900">
+                            ${renderTicketIcon('size-3.5')} ใช้ตั๋วฟรี
+                          </button>
+                        ` : ''}
+                        <button onclick="openChapter('${series.slug}', ${ep.chapterNumber}, ${ep.coinPrice}, '${ep.id}', false)" class="flex items-center gap-1 rounded-full bg-zinc-950 px-3.5 py-1.5 text-xs font-black text-amber-300">
+                          ${renderCoinIcon('size-3.5')} ${ep.coinPrice}
+                        </button>
+                      `}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          ` : state.seriesTab === 'preview' ? `
+            <div class="space-y-3 p-4">
+              <p class="text-xs font-bold text-zinc-500">ภาพตัวอย่าง 2 หน้าแรกจากคลังไฟล์ GitHub (OhmmyTRC/nivatoon):</p>
+              ${series.episodes[0].pages.slice(0, 2).map((p, idx) => `
+                <img src="${p}" onerror="this.onerror=null;this.src='${series.episodes[0].fallbackPages?.[idx] || series.fallbackCover}';" class="w-full rounded-xl border border-zinc-200" />
+              `).join('')}
+            </div>
+          ` : `
+            <div class="grid grid-cols-2 gap-3.5 p-4 sm:grid-cols-3">
+              ${state.seriesList.filter(s => s.slug !== series.slug).slice(0, 6).map((item, i) => renderComicCard(item, i)).join('')}
+            </div>
+          `}
+        </main>
+      `;
+    }
+
+    function renderReader() {
+      const series = state.seriesList.find(s => s.slug === state.seriesSlug) || state.seriesList[0];
+      const ep = series.episodes.find(e => e.chapterNumber === state.chapterNum) || series.episodes[0];
+      const epComments = state.comments.filter(c => c.seriesSlug === series.slug && c.chapterNumber === ep.chapterNumber);
+      return `
+        <div class="min-h-screen bg-[#0c0d0f] text-white pb-24">
+          <header class="sticky top-0 z-40 flex items-center justify-between border-b border-white/10 bg-[#121418]/95 px-4 py-3 backdrop-blur">
+            <div class="flex items-center gap-2 min-w-0">
+              <button onclick="navigate('series', { seriesSlug: '${series.slug}' })" class="rounded-full bg-white/10 px-3 py-1 text-xs font-bold">← กลับ</button>
+              <b class="truncate text-xs sm:text-sm">${series.title} • Ep.${ep.chapterNumber}</b>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="state.showAiOverlay = !state.showAiOverlay; render();" class="rounded-full bg-[#00dc64]/20 px-3 py-1 text-[11px] font-black text-[#b9ff66]">
+                ${state.showAiOverlay ? 'ซ่อนคำแปล AI' : '✨ AI แปลภาพ'}
+              </button>
+            </div>
+          </header>
+
+          <main class="mx-auto max-w-[760px]">
+            ${ep.pages.map((p, idx) => `
+              <div class="relative">
+                <img src="${p}" onerror="this.onerror=null;this.src='${ep.fallbackPages?.[idx % (ep.fallbackPages?.length || 1)] || series.fallbackCover}';" class="w-full block select-none" loading="lazy" />
+                ${state.showAiOverlay ? `
+                  <div class="absolute left-4 right-4 top-4 rounded-2xl border-2 border-[#00dc64] bg-white/95 p-3 text-xs font-black text-zinc-950 shadow-xl">
+                    ✨ Gemini AI แปลหน้า ${idx + 1}: "พลังแห่งชะตากรรมที่หวนคืนมาในครั้งนี้ ข้าจะไม่ยอมสูญเสียใครไปอีก!"
+                  </div>
+                ` : ''}
+              </div>
+            `).join('')}
+
+            <section class="mt-6 border-t border-white/10 bg-[#14171d] p-5">
+              <h3 class="text-base font-black">ความคิดเห็นนักอ่าน (${epComments.length}) • ซิงก์ Firebase (niva-421c2)</h3>
+              <div class="mt-3 flex gap-2">
+                <input id="cmtInput" placeholder="ร่วมพูดคุยเกี่ยวกับตอนนี้..." class="flex-1 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-xs text-white outline-none" />
+                <button onclick="submitComment('${series.slug}', ${ep.chapterNumber})" class="rounded-xl bg-[#00dc64] px-5 py-2.5 text-xs font-black text-zinc-950">ส่ง</button>
+              </div>
+              <div class="mt-4 space-y-2.5">
+                ${epComments.map(c => `
+                  <div class="rounded-xl bg-white/5 p-3.5 text-xs">
+                    <div class="flex items-center justify-between">
+                      <span class="font-black text-[#00dc64]">${c.authorName} [${c.badge}]</span>
+                      <span class="text-white/50">♥ ${c.likes}</span>
+                    </div>
+                    <p class="mt-1.5 text-white/90">${c.body}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+          </main>
+        </div>
+      `;
+    }
+
+    function renderWallet() {
+      const u = state.currentUser;
+      return `
+        <main class="mx-auto max-w-[960px] space-y-6 px-4 py-6 pb-24">
+          <div class="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+            <div>
+              <p class="text-xs text-zinc-500">ยอดคงเหลือของคุณ</p>
+              <div class="mt-1 flex items-center gap-4">
+                <span class="flex items-center gap-1.5 text-2xl font-black">${renderCoinIcon('size-7')} ${u.coinBalance.toLocaleString()} เหรียญ</span>
+                <span class="flex items-center gap-1.5 text-lg font-black text-[#008f42]">${renderTicketIcon('size-6')} ${u.freePassTickets} ตั๋วฟรี</span>
+              </div>
+            </div>
+            <span class="rounded-full bg-zinc-950 px-3.5 py-1.5 text-xs font-black text-[#00dc64]">แผนปัจจุบัน: ${u.plan.toUpperCase()}</span>
+          </div>
+
+          <!-- NIVATOON PLUS 129 THB -->
+          <div class="rounded-2xl border-2 border-[#00dc64] bg-emerald-50/70 p-6">
+            <span class="rounded bg-[#00dc64] px-2.5 py-0.5 text-[10px] font-black text-white">RECOMMENDED</span>
+            <h2 class="mt-2 text-xl font-black text-zinc-950">NIVATOON PLUS • ฿129 / เดือน (+300 เหรียญโบนัส)</h2>
+            <p class="mt-1 text-xs text-zinc-600">✓ อ่านตอนล่วงหน้าฟรีทุกเรื่อง ไม่ต้องใช้เหรียญปลดล็อกรายตอน • ✓ รับโบนัส +300 เหรียญทันทีหลังตรวจสลิป</p>
+            <button onclick="openPaymentModal('plus-monthly')" class="mt-4 rounded-full bg-[#00dc64] px-6 py-2.5 text-xs font-black text-white shadow-sm">
+              ${u.plan === 'plus' ? 'คุณเป็นสมาชิก NIVATOON PLUS แล้ว ✓' : 'สมัครแพ็กเกจ NIVATOON PLUS (฿129)'}
+            </button>
+          </div>
+
+          <!-- Coin Packages -->
+          <div>
+            <h3 class="text-lg font-black">แพ็กเกจเติมเหรียญ (PromptPay 1709700341765 / TrueMoney 0997353282 • ธีรชาติ เครือวัลย์)</h3>
+            <div class="mt-3 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+              ${COIN_PACKAGES.map(p => `
+                <div class="flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
+                  <div>
+                    <span class="rounded bg-amber-100 px-2 py-0.5 text-[10px] font-black text-amber-900">${p.badge}</span>
+                    <div class="mt-2 flex items-center gap-2 text-lg font-black">
+                      ${renderCoinIcon('size-6')}
+                      <span>${p.coins}${p.bonus > 0 ? ` + ${p.bonus}` : ''} เหรียญ</span>
+                    </div>
+                    <p class="mt-1 text-xs text-zinc-400">รับรวม ${(p.coins + p.bonus).toLocaleString()} พอยน์</p>
+                  </div>
+                  <button onclick="openPaymentModal('${p.id}')" class="mt-4 w-full rounded-xl bg-zinc-950 py-2.5 text-xs font-black text-[#00dc64]">
+                    THB ${p.priceTHB}.00
+                  </button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </main>
+      `;
+    }
+
+    function renderProfile() {
+      const u = state.currentUser;
+      return `
+        <main class="mx-auto max-w-[960px] space-y-6 px-4 py-6 pb-24">
+          <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
+            <div class="h-28 bg-gradient-to-r from-zinc-900 via-emerald-950 to-zinc-900"></div>
+            <div class="px-6 pb-6">
+              <div class="-mt-10 flex flex-wrap items-end justify-between gap-4">
+                <div class="flex items-end gap-4">
+                  <div class="grid size-20 place-items-center rounded-full bg-zinc-950 text-2xl font-black text-[#00dc64] ring-4 ring-[#00dc64]">
+                    ${u.displayName.slice(0, 1).toUpperCase()}
+                  </div>
+                  <div>
+                    <h1 class="text-xl font-black">${u.displayName}</h1>
+                    <p class="text-xs text-zinc-500">${u.email} • สิทธิ์: ${u.role.toUpperCase()}</p>
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <button onclick="toggleDarkTheme()" class="rounded-full border border-zinc-200 px-4 py-1.5 text-xs font-black">
+                    ${u.darkMode ? '☀️ โหมดสว่าง' : '🌙 โหมดมืด'}
+                  </button>
+                  <button onclick="logoutUser()" class="rounded-full border border-rose-200 bg-rose-50 px-4 py-1.5 text-xs font-black text-rose-700">ออกจากระบบ</button>
+                </div>
+              </div>
+              <p class="mt-3 text-xs text-zinc-600">${u.bio || 'นักอ่าน NIVATOON'}</p>
+            </div>
+          </div>
+
+          <!-- Cloud Sync Card -->
+          <div class="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 text-xs">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <b class="text-sm font-black text-emerald-950">☁️ สถาปัตยกรรม GitHub Storage & Firebase Database</b>
+                <p class="mt-0.5 text-emerald-900">ไฟล์ภาพการ์ตูน: <b>github.com/OhmmyTRC/nivatoon</b> • ฐานข้อมูล: <b>Firebase (niva-421c2)</b></p>
+              </div>
+              <button onclick="syncFromCloud()" class="rounded-full bg-zinc-950 px-4 py-2 font-black text-[#00dc64]">🔄 ซิงก์ข้อมูลคลาวด์ทันที</button>
+            </div>
+          </div>
+        </main>
+      `;
+    }
+
+    function renderStudio() {
+      return `
+        <main class="mx-auto max-w-[760px] space-y-5 px-4 py-6 pb-24">
+          <div class="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <span class="rounded-full bg-[#00dc64]/15 px-3 py-1 text-xs font-black text-[#008f42]">CREATOR STUDIO • GITHUB STORAGE</span>
+            <h1 class="mt-2 text-2xl font-black">อัปโหลดผลงานมังฮวาขึ้นคลัง GitHub & Firebase</h1>
+            <div class="mt-4 space-y-3 text-xs">
+              <input id="stTitle" placeholder="ชื่อเรื่อง (เช่น ดาบราชันย์ทะลุมิติ)" class="w-full rounded-xl border border-zinc-200 px-3.5 py-2.5" />
+              <textarea id="stSyn" rows="3" placeholder="เรื่องย่อ..." class="w-full rounded-xl border border-zinc-200 px-3.5 py-2.5"></textarea>
+              <button onclick="publishStudioComic()" class="w-full rounded-full bg-[#00dc64] py-3 text-sm font-black text-white">อัปโหลดขึ้น GitHub & ซิงก์ฐานข้อมูล Firebase</button>
+            </div>
+          </div>
+        </main>
+      `;
+    }
+
+    function renderAdmin() {
+      return `
+        <main class="mx-auto max-w-[1100px] space-y-6 px-4 py-6 pb-24">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 pb-4">
+            <div>
+              <span class="rounded-full bg-zinc-950 px-3 py-1 text-[11px] font-black text-[#00dc64]">ADMIN BACKOFFICE</span>
+              <h1 class="mt-2 text-2xl font-black">ระบบจัดการหลังบ้าน NIVATOON (Firebase niva-421c2)</h1>
+            </div>
+            <button onclick="syncFromCloud()" class="rounded-full bg-[#00dc64] px-4 py-2 text-xs font-black text-white">☁️ ซิงก์ GitHub + Firebase ทันที</button>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-4">
+            <div class="rounded-2xl border border-zinc-200 bg-white p-4"><p class="text-xs text-zinc-500">เรื่องทั้งหมดบน GitHub</p><b class="text-2xl font-black">${state.seriesList.length} เรื่อง</b></div>
+            <div class="rounded-2xl border border-zinc-200 bg-white p-4"><p class="text-xs text-zinc-500">สมาชิกทั้งหมด</p><b class="text-2xl font-black">${state.users.length} คน</b></div>
+            <div class="rounded-2xl border border-zinc-200 bg-white p-4"><p class="text-xs text-zinc-500">คำขอ Creator รอตรวจ</p><b class="text-2xl font-black">${state.creatorRequests.filter(r => r.status === 'pending').length} รายการ</b></div>
+            <div class="rounded-2xl border border-zinc-200 bg-white p-4"><p class="text-xs text-zinc-500">คอมเมนต์ทั้งหมด</p><b class="text-2xl font-black">${state.comments.length} ข้อความ</b></div>
+          </div>
+        </main>
+      `;
+    }
+
+    function renderAuthGate() {
+      return `
+        <div class="min-h-screen grid place-items-center bg-zinc-50 p-4">
+          <div class="w-full max-w-md rounded-3xl border border-zinc-200 bg-white p-7 shadow-xl">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-xl font-black">
+                <span class="grid size-9 place-items-center rounded-xl bg-[#00dc64] text-white">N</span>
+                <span>NIVATOON</span>
+              </div>
+              <span class="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-black text-emerald-800">สมาชิกเท่านั้น</span>
+            </div>
+
+            <div class="mt-5 grid grid-cols-2 gap-1 rounded-full bg-zinc-100 p-1 text-xs font-black">
+              <button onclick="state.authMode='login';state.authError='';render();" class="rounded-full py-2 ${state.authMode === 'login' ? 'bg-white shadow-sm text-zinc-950' : 'text-zinc-500'}">เข้าสู่ระบบ</button>
+              <button onclick="state.authMode='register';state.authError='';render();" class="rounded-full py-2 ${state.authMode === 'register' ? 'bg-white shadow-sm text-zinc-950' : 'text-zinc-500'}">สมัครสมาชิก</button>
+            </div>
+
+            <h1 class="mt-4 text-xl font-black">
+              ${state.authMode === 'register' ? 'สมัครสมาชิกใหม่ (เริ่มต้น 0 เหรียญ + 3 ตั๋วฟรี)' : 'เข้าสู่ระบบก่อนอ่านเว็บตูน'}
+            </h1>
+            <p class="mt-1 text-xs text-zinc-500">คลังไฟล์ภาพ GitHub (OhmmyTRC/nivatoon) • ฐานข้อมูล Firebase (niva-421c2)</p>
+
+            ${state.authError ? `<div class="mt-3 rounded-xl bg-rose-50 p-3 text-xs font-bold text-rose-700">${state.authError}</div>` : ''}
+
+            <div class="mt-4 space-y-3 text-xs">
+              ${state.authMode === 'register' ? `<input id="authName" placeholder="ชื่อที่แสดง" class="w-full rounded-xl border border-zinc-200 px-3.5 py-2.5" />` : ''}
+              <input id="authEmail" type="email" placeholder="อีเมล (เช่น reader@gmail.com)" class="w-full rounded-xl border border-zinc-200 px-3.5 py-2.5" />
+              <input id="authPass" type="password" placeholder="รหัสผ่าน" class="w-full rounded-xl border border-zinc-200 px-3.5 py-2.5" />
+              ${state.authMode === 'register' ? `<input id="authPin" maxlength="6" placeholder="ตั้งรหัส PIN ความปลอดภัย 6 หลัก (เช่น 123456)" class="w-full rounded-xl border border-zinc-200 px-3.5 py-2.5" />` : ''}
+              <button onclick="handleAuthSubmit()" class="w-full rounded-full bg-[#00dc64] py-3 text-sm font-black text-white shadow-sm">
+                ${state.authMode === 'register' ? 'สมัครสมาชิก & รับตั๋วอ่านฟรี 3 ใบ' : 'เข้าสู่ระบบ'}
+              </button>
+            </div>
+
+            <div class="mt-5 border-t border-zinc-100 pt-4">
+              <p class="text-[11px] font-bold text-zinc-400">บัญชีทดสอบด่วน (PIN: 123456):</p>
+              <div class="mt-2 flex flex-wrap gap-1.5">
+                <button onclick="quickLogin('reader@gmail.com', 'Reader2026!')" class="rounded-full border border-zinc-200 px-3 py-1.5 text-[11px] font-bold">นักอ่าน (User)</button>
+                <button onclick="quickLogin('creator@nivatoon.app', 'Creator2026!')" class="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-bold text-emerald-900">ครีเอเตอร์ (Creator)</button>
+                <button onclick="quickLogin('admin@nivatoon.app', 'NivaAdmin2026!')" class="rounded-full bg-zinc-950 px-3 py-1.5 text-[11px] font-bold text-[#00dc64]">แอดมิน (Admin)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPinGate() {
+      const u = state.currentUser;
+      return `
+        <div class="min-h-screen grid place-items-center bg-zinc-950 p-4 text-white">
+          <div class="w-full max-w-sm rounded-3xl border border-white/10 bg-zinc-900 p-7 text-center shadow-2xl">
+            <span class="rounded-full bg-[#00dc64]/20 px-3 py-1 text-[11px] font-black text-[#00dc64]">2-STEP SECURITY GATE</span>
+            <h2 class="mt-3 text-xl font-black">สวัสดี ${u.displayName}</h2>
+            <p class="mt-1 text-xs text-white/60">กรุณายืนยันรหัส PIN 6 หลัก หรือสแกนลายนิ้วมือเพื่อเข้าใช้งาน</p>
+            ${state.pinError ? `<div class="mt-3 rounded-xl bg-rose-500/20 p-2.5 text-xs font-bold text-rose-300">${state.pinError}</div>` : ''}
+            <input id="pinInput" type="password" maxlength="6" value="123456" class="mt-4 w-full rounded-2xl border border-white/15 bg-black/40 py-3 text-center text-2xl font-black tracking-[0.5em] text-[#00dc64] outline-none" />
+            <button onclick="verifyPinGate()" class="mt-4 w-full rounded-full bg-[#00dc64] py-3 text-sm font-black text-zinc-950">ปลดล็อกด้วยรหัส PIN 6 หลัก</button>
+            <button onclick="state.pinUnlocked = true; render();" class="mt-2 w-full rounded-full border border-white/15 py-2.5 text-xs font-bold text-white/80">👆 สแกนลายนิ้วมือ / Biometric Passkey</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderModals() {
+      const u = state.currentUser;
+      if (!u) return '';
+      const todayKey = new Date().toISOString().slice(0, 10);
+      const checkedInToday = u.lastCheckinDate === todayKey;
+      const nextDay = (u.checkinDay % 7) + 1;
+      const nextReward = nextDay === 7 ? 3 : 1;
+
+      let html = '';
+      if (state.showPromoModal) {
+        html += `
+          <div class="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm">
+            <div class="relative w-full max-w-md rounded-3xl bg-zinc-900 p-7 text-center text-white shadow-2xl">
+              <button onclick="state.showPromoModal=false;render();" class="absolute right-4 top-4 text-xs font-bold text-white/60">ปิด ✕</button>
+              <div class="mx-auto grid size-14 place-items-center rounded-2xl bg-emerald-500/20">${renderTicketIcon('size-8')}</div>
+              <h3 class="mt-3 text-xl font-black">เช็กอินสะสมตั๋วอ่านฟรี 7 วัน</h3>
+              <p class="mt-1 text-xs text-white/65">วันที่ 1–6 รับวันละ 1 ตั๋ว • วันที่ 7 รับโบนัส 3 ตั๋วอ่านฟรี!</p>
+              <div class="mt-5 grid grid-cols-7 gap-1.5 text-center text-[10px] font-black">
+                ${[1,2,3,4,5,6,7].map(d => {
+                  const done = d <= u.checkinDay;
+                  const isTarget = !checkedInToday && d === nextDay;
+                  return `<div class="rounded-xl border p-2 ${done ? 'border-emerald-400 bg-emerald-500/25 text-emerald-200' : isTarget ? 'border-[#00dc64] bg-[#00dc64] text-zinc-950' : 'border-white/15 bg-white/5 text-white/70'}"><span>D${d}</span><b class="block text-xs">+${d === 7 ? 3 : 1}</b></div>`;
+                }).join('')}
+              </div>
+              <button onclick="claimCheckin()" ${checkedInToday ? 'disabled' : ''} class="mt-6 w-full rounded-full bg-[#00dc64] py-3.5 text-sm font-black text-zinc-950 disabled:opacity-50">
+                ${checkedInToday ? 'เช็กอินรับตั๋ววันนี้แล้ว ✓' : `กดเช็กอินวันนี้ รับ +${nextReward} ตั๋วอ่านฟรี!`}
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      if (state.paymentModalPkg) {
+        const p = state.paymentModalPkg;
+        const total = p.coins + (p.bonus || 0);
+        html += `
+          <div class="fixed inset-0 z-50 grid place-items-center bg-black/75 p-4 backdrop-blur-sm">
+            <div class="relative w-full max-w-md rounded-3xl bg-white p-6 text-zinc-950 shadow-2xl max-h-[90vh] overflow-y-auto">
+              <button onclick="state.paymentModalPkg=null;render();" class="absolute right-4 top-4 text-xs font-bold text-zinc-400">ปิด ✕</button>
+              <h3 class="text-lg font-black">${p.isPlus ? 'สมัครแพ็กเกจ NIVATOON PLUS (฿129)' : `เติมเหรียญ +${total.toLocaleString()} พอยน์ (฿${p.priceTHB})`}</h3>
+              <div class="mt-3 grid grid-cols-2 gap-1.5 rounded-full bg-zinc-100 p-1 text-xs font-black">
+                <button onclick="state.paymentProvider='promptpay';render();" class="rounded-full py-2 ${state.paymentProvider === 'promptpay' ? 'bg-white shadow-sm' : 'text-zinc-500'}">พร้อมเพย์ QR</button>
+                <button onclick="state.paymentProvider='truemoney';render();" class="rounded-full py-2 ${state.paymentProvider === 'truemoney' ? 'bg-white shadow-sm' : 'text-zinc-500'}">TrueMoney Wallet</button>
+              </div>
+              ${state.paymentProvider === 'promptpay' ? `
+                <div class="mt-3 rounded-2xl border border-zinc-200 p-4 text-center">
+                  <p class="text-[11px] font-black text-blue-900">THAI QR PROMPTPAY</p>
+                  <b class="block text-2xl font-black text-[#00a84b]">฿${p.priceTHB}.00</b>
+                  <p class="text-xs font-bold text-zinc-600">พร้อมเพย์: 1709700341765 • ชื่อบัญชี: ธีรชาติ เครือวัลย์</p>
+                  <img src="${p.qr}" class="mx-auto mt-2 h-44 w-44 object-contain" />
+                </div>
+              ` : `
+                <div class="mt-3 rounded-2xl bg-[#ff6600] p-4 text-white">
+                  <p class="text-xs font-bold">โอนเข้า TrueMoney Wallet</p>
+                  <b class="block text-2xl font-black">0997353282</b>
+                  <p class="text-xs font-bold">ชื่อบัญชี: ธีรชาติ เครือวัลย์ • ยอดชำระ ฿${p.priceTHB}.00</p>
+                </div>
+              `}
+              <div class="mt-3">
+                <label class="block w-full cursor-pointer rounded-xl border-2 border-dashed border-zinc-300 p-3 text-center text-xs font-bold hover:border-[#00dc64]">
+                  📎 ${state.paymentSlipName ? `แนบสลิปแล้ว: ${state.paymentSlipName}` : '1. เลือกรูปสลิปโอนเงินจริงจากเครื่อง (จำเป็น)'}
+                  <input type="file" accept="image/*" onchange="handleSlipFile(this)" class="hidden" />
+                </label>
+                ${state.paymentSlipRef ? `<p class="mt-1.5 text-[11px] font-bold text-[#008f42]">✓ สแกนเลขอ้างอิงสลิป: ${state.paymentSlipRef}</p>` : ''}
+              </div>
+              <button onclick="confirmSlipPayment()" class="mt-4 w-full rounded-full bg-[#00dc64] py-3 text-sm font-black text-white">
+                ยืนยันการชำระเงิน ฿${p.priceTHB}.00
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      if (state.paymentResult) {
+        const r = state.paymentResult;
+        html += `
+          <div class="fixed inset-0 z-50 grid place-items-center bg-black/75 p-4 backdrop-blur-sm">
+            <div class="w-full max-w-sm rounded-3xl bg-white p-7 text-center text-zinc-950 shadow-2xl">
+              <div class="mx-auto grid size-16 place-items-center rounded-full ${r.ok ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-600'} text-3xl font-black">
+                ${r.ok ? '✓' : '!'}
+              </div>
+              <h3 class="mt-3 text-xl font-black">${r.title}</h3>
+              <p class="mt-2 text-xs text-zinc-600">${r.message}</p>
+              <button onclick="state.paymentResult=null;render();" class="mt-5 w-full rounded-full bg-[#00dc64] py-3 text-xs font-black text-white">ตกลง</button>
+            </div>
+          </div>
+        `;
+      }
+      return html;
+    }
+
+    function handleAuthSubmit() {
+      const email = (document.getElementById('authEmail')?.value || '').trim().toLowerCase();
+      const pass = document.getElementById('authPass')?.value || '';
+      if (state.authMode === 'login') {
+        const found = state.users.find(u => u.email.toLowerCase() === email && u.password === pass);
+        if (!found) {
+          state.authError = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+          render();
+          return;
+        }
+        state.currentUser = found;
+        state.pinUnlocked = false;
+        render();
+        return;
+      }
+      const name = (document.getElementById('authName')?.value || '').trim() || 'นักอ่านใหม่';
+      const pin = (document.getElementById('authPin')?.value || '123456').trim();
+      if (!email.includes('@') || pass.length < 6 || !/^\d{6}$/.test(pin)) {
+        state.authError = 'กรุณากรอกอีเมล รหัสผ่าน (6+ ตัว) และรหัส PIN 6 หลักให้ครบถ้วน';
+        render();
+        return;
+      }
+      const newUser = {
+        id: 'user-' + Date.now(),
+        email,
+        password: pass,
+        pin,
+        role: 'user',
+        creatorStatus: 'none',
+        displayName: name,
+        bio: '',
+        avatarFrame: 'emerald',
+        bannerTheme: 'midnight',
+        coinBalance: 0,
+        freePassTickets: 3,
+        plan: 'free',
+        checkinDay: 0,
+        lastCheckinDate: '',
+        darkMode: false,
+        librarySlugs: [],
+        unlockedChapterIds: [],
+        readingHistory: [],
+        transactions: [],
+      };
+      state.users.push(newUser);
+      state.currentUser = newUser;
+      state.pinUnlocked = false;
+      pushToFirebase('users', newUser.id, newUser);
+      render();
+    }
+
+    function quickLogin(email, pass) {
+      const found = state.users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === pass);
+      if (found) {
+        state.currentUser = found;
+        state.pinUnlocked = true;
+        render();
+      }
+    }
+
+    function verifyPinGate() {
+      const val = (document.getElementById('pinInput')?.value || '').trim();
+      if (val === state.currentUser.pin) {
+        state.pinUnlocked = true;
+        state.pinError = '';
+      } else {
+        state.pinError = 'รหัส PIN 6 หลักไม่ถูกต้อง';
+      }
+      render();
+    }
+
+    function toggleNotif() {
+      state.showNotifMenu = !state.showNotifMenu;
+      if (state.showNotifMenu) {
+        state.notifications.forEach(n => n.isRead = true);
+      }
+      render();
+    }
+
+    function claimCheckin() {
+      const u = state.currentUser;
+      const todayKey = new Date().toISOString().slice(0, 10);
+      if (u.lastCheckinDate === todayKey) return;
+      const nextDay = (u.checkinDay % 7) + 1;
+      const reward = nextDay === 7 ? 3 : 1;
+      u.checkinDay = nextDay;
+      u.lastCheckinDate = todayKey;
+      u.freePassTickets += reward;
+      pushToFirebase('users', u.id, { id: u.id, email: u.email, freePassTickets: u.freePassTickets, checkinDay: u.checkinDay, lastCheckinDate: todayKey });
+      render();
+    }
+
+    function toggleLibrary(slug) {
+      const u = state.currentUser;
+      const idx = u.librarySlugs.indexOf(slug);
+      if (idx >= 0) u.librarySlugs.splice(idx, 1);
+      else u.librarySlugs.push(slug);
+      render();
+    }
+
+    function openChapter(slug, chNum, price, chId, useTicket) {
+      const u = state.currentUser;
+      const unlocked = price === 0 || u.plan === 'plus' || u.unlockedChapterIds.includes(chId);
+      if (!unlocked) {
+        if (useTicket) {
+          if (u.freePassTickets <= 0) return;
+          u.freePassTickets -= 1;
+          u.unlockedChapterIds.push(chId);
+        } else {
+          if (u.coinBalance < price) {
+            navigate('wallet');
+            return;
+          }
+          u.coinBalance -= price;
+          u.unlockedChapterIds.push(chId);
+        }
+        pushToFirebase('users', u.id, { id: u.id, email: u.email, coinBalance: u.coinBalance, freePassTickets: u.freePassTickets });
+      }
+      u.readingHistory = [{ seriesSlug: slug, chapterNumber: chNum, percent: 100 }, ...u.readingHistory.filter(h => h.seriesSlug !== slug)];
+      navigate('reader', { seriesSlug: slug, chapterNum: chNum });
+    }
+
+    function submitComment(slug, chNum) {
+      const inp = document.getElementById('cmtInput');
+      const text = (inp?.value || '').trim();
+      if (!text) return;
+      const cmt = {
+        id: 'c-' + Date.now(),
+        seriesSlug: slug,
+        chapterNumber: chNum,
+        authorName: state.currentUser.displayName,
+        badge: state.currentUser.role.toUpperCase(),
+        body: text,
+        likes: 1,
+      };
+      state.comments.unshift(cmt);
+      pushToFirebase('comments', cmt.id, {
+        id: cmt.id,
+        series_slug: slug,
+        chapter_number: chNum,
+        author_name: cmt.authorName,
+        author_badge: cmt.badge,
+        body: text,
+        likes: 1,
+        created_at: new Date().toISOString(),
+      });
+      render();
+    }
+
+    function openPaymentModal(pkgId) {
+      const pkg = pkgId === 'plus-monthly' ? PLUS_PACKAGE : COIN_PACKAGES.find(p => p.id === pkgId);
+      state.paymentModalPkg = pkg;
+      state.paymentSlipName = '';
+      state.paymentSlipRef = '';
+      render();
+    }
+
+    function handleSlipFile(input) {
+      const file = input.files?.[0];
+      if (!file) return;
+      state.paymentSlipName = file.name;
+      state.paymentSlipRef = 'SLIP-' + file.size + '-' + file.name.slice(0, 6).toUpperCase();
+      render();
+    }
+
+    function confirmSlipPayment() {
+      const p = state.paymentModalPkg;
+      if (!state.paymentSlipName) {
+        state.paymentResult = { ok: false, title: 'ยังไม่ได้แนบสลิปโอนเงิน', message: 'กรุณาเลือกรูปสลิปโอนเงินจริงเข้าบัญชี ธีรชาติ เครือวัลย์ ก่อนกดยืนยัน' };
+        render();
+        return;
+      }
+      if (state.usedSlipRefs.has(state.paymentSlipRef)) {
+        state.paymentResult = { ok: false, title: 'สลิปนี้ถูกใช้งานไปแล้ว', message: 'ระบบตรวจพบการใช้สลิปซ้ำ กรุณาใช้สลิปการโอนรายการใหม่' };
+        render();
+        return;
+      }
+      state.usedSlipRefs.add(state.paymentSlipRef);
+      const total = p.coins + (p.bonus || 0);
+      state.currentUser.coinBalance += total;
+      if (p.isPlus) state.currentUser.plan = 'plus';
+      state.paymentModalPkg = null;
+      state.paymentResult = {
+        ok: true,
+        title: p.isPlus ? 'เปิดใช้งาน NIVATOON PLUS สำเร็จ!' : 'เติมเหรียญสำเร็จ!',
+        message: `ตรวจสอบสลิปโอนเงิน ฿${p.priceTHB}.00 เรียบร้อย ได้รับ +${total.toLocaleString()} เหรียญ และซิงก์เข้า Firebase (niva-421c2) แล้ว`,
+      };
+      pushToFirebase('users', state.currentUser.id, {
+        id: state.currentUser.id,
+        email: state.currentUser.email,
+        coinBalance: state.currentUser.coinBalance,
+        plan: state.currentUser.plan,
+      });
+      render();
+    }
+
+    function publishStudioComic() {
+      const title = (document.getElementById('stTitle')?.value || '').trim();
+      const syn = (document.getElementById('stSyn')?.value || '').trim();
+      if (!title) return;
+      const slug = 'canvas-' + Date.now();
+      const newSeries = {
+        slug,
+        folder: slug,
+        title,
+        sub: title.toUpperCase(),
+        author: state.currentUser.displayName,
+        origin: 'korea',
+        status: 'ongoing',
+        genres: ['action', 'fantasy'],
+        rating: 5.0,
+        likes: '1.2K',
+        updateDay: 'ศุกร์',
+        coverUrl: '../comics/01-moonlit-sword-cover.jpg',
+        fallbackCover: '../comics/01-moonlit-sword-cover.jpg',
+        synopsis: syn || 'ผลงานใหม่จาก NIVATOON Studio',
+        episodes: buildEpisodes(slug, '01-moonlit-sword'),
+      };
+      state.seriesList.unshift(newSeries);
+      pushToFirebase('series', slug, { slug, title, author: newSeries.author, synopsis: newSeries.synopsis });
+      navigate('series', { seriesSlug: slug });
+    }
+
+    function toggleDarkTheme() {
+      state.currentUser.darkMode = !state.currentUser.darkMode;
+      document.body.classList.toggle('dark-theme', state.currentUser.darkMode);
+      render();
+    }
+
+    function logoutUser() {
+      state.currentUser = null;
+      state.pinUnlocked = false;
+      render();
+    }
+
+    function render() {
+      const root = document.getElementById('app');
+      if (!state.currentUser) {
+        root.innerHTML = renderAuthGate();
+        return;
+      }
+      if (!state.pinUnlocked) {
+        root.innerHTML = renderPinGate();
+        return;
+      }
+      if (state.route === 'reader') {
+        root.innerHTML = renderReader();
+        return;
+      }
+
+      let pageHtml = '';
+      if (state.route === 'home') pageHtml = renderHome();
+      else if (state.route === 'schedule') pageHtml = renderSchedule();
+      else if (state.route === 'ranking') pageHtml = renderRanking();
+      else if (state.route === 'series') pageHtml = renderSeriesDetail();
+      else if (state.route === 'wallet') pageHtml = renderWallet();
+      else if (state.route === 'profile') pageHtml = renderProfile();
+      else if (state.route === 'studio' || state.route === 'canvas') pageHtml = renderStudio();
+      else if (state.route === 'admin') pageHtml = renderAdmin();
+      else if (state.route === 'library') pageHtml = renderSchedule();
+      else pageHtml = renderHome();
+
+      root.innerHTML = renderHeader() + pageHtml + renderBottomNav() + renderModals();
+    }
+
+    render();
+    syncFromCloud();
+  </script>
+</body>
+</html>
