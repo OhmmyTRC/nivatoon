@@ -16,12 +16,12 @@ tsconfig.tsbuildinfo
 serviceAccountKey.json
 
 # Local SQLite database & runtime uploads
-data/
+/data/
 *.db
 *.db-wal
 *.db-shm
 *.sqlite*
-public/uploads/
+/public/uploads/
 
 # Flutter build outputs & local caches
 mobile_app/build/
