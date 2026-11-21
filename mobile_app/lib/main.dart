@@ -1,0 +1,90 @@
+import 'package:material_ui/material_ui.dart';
+import 'package:nivatoon_mobile/data/repositories/nivatoon_repository.dart';
+import 'package:nivatoon_mobile/ui/features/auth/auth_and_pin_screens.dart';
+import 'package:nivatoon_mobile/ui/features/home/home_and_reader_screens.dart';
+import 'package:nivatoon_mobile/ui/features/shell/views/nivatoon_shell_view.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const NivatoonApp());
+}
+
+/// Root widget for the NIVATOON Android application (Native Dart UI + Live Server Mode).
+class NivatoonApp extends StatefulWidget {
+  const NivatoonApp({super.key, this.home, this.repository});
+
+  final Widget? home;
+  final NivatoonRepository? repository;
+
+  @override
+  State<NivatoonApp> createState() => _NivatoonAppState();
+}
+
+class _NivatoonAppState extends State<NivatoonApp> {
+  late final NivatoonRepository _repo;
+
+  @override
+  void initState() {
+    super.initState();
+    _repo = widget.repository ?? NivatoonRepository();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: _repo,
+      builder: (BuildContext context, _) {
+        final isDark = _repo.isDarkMode;
+        return MaterialApp(
+          title: 'NIVATOON',
+          debugShowCheckedModeBanner: false,
+          themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF00DC64),
+              brightness: Brightness.light,
+            ),
+          ),
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF00DC64),
+              brightness: Brightness.dark,
+            ),
+          ),
+          home: widget.home ?? _buildActiveGate(),
+        );
+      },
+    );
+  }
+
+  Widget _buildActiveGate() {
+    if (_repo.useLiveWebView) {
+      return Scaffold(
+        body: const NivatoonShellView(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => _repo.setUseLiveWebView(false),
+          backgroundColor: const Color(0xFF18181B),
+          icon: const Icon(Icons.phone_android_rounded, color: Color(0xFF00DC64)),
+          label: const Text(
+            'กลับโหมดแอป Native',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w800,
+              fontSize: 12,
+            ),
+          ),
+        ),
+      );
+    }
+    if (!_repo.isAuthenticated) {
+      return AuthScreen(repo: _repo);
+    }
+    if (!_repo.isPinUnlocked) {
+      return PinSecurityGateScreen(repo: _repo);
+    }
+    return MainHomeShell(repo: _repo);
+  }
+}

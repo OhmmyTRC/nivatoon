@@ -23,6 +23,12 @@ data/
 *.sqlite*
 public/uploads/
 
+# Flutter build outputs & local caches
+mobile_app/build/
+mobile_app/.dart_tool/
+mobile_app/android/.gradle/
+mobile_app/**/*.iml
+
 # OS junk
 .DS_Store
 Thumbs.db
