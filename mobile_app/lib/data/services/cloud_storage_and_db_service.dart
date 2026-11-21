@@ -179,6 +179,15 @@ class CloudStorageAndDbService {
           }
         } catch (_) {}
 
+        final Map<String, dynamic> bodyMap = <String, dynamic>{
+          'message': commitMessage,
+          'content': base64Encode(bytes),
+          'branch': githubBranch,
+        };
+        if (existingSha != null) {
+          bodyMap['sha'] = existingSha;
+        }
+
         final putRes = await http
             .put(
               apiUri,
@@ -187,12 +196,7 @@ class CloudStorageAndDbService {
                 'Accept': 'application/vnd.github+json',
                 'Content-Type': 'application/json',
               },
-              body: jsonEncode(<String, dynamic>{
-                'message': commitMessage,
-                'content': base64Encode(bytes),
-                'branch': githubBranch,
-                'sha': ?existingSha,
-              }),
+              body: jsonEncode(bodyMap),
             )
             .timeout(const Duration(seconds: 12));
 
