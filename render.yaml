@@ -3,11 +3,18 @@ services:
     name: nivatoon-web
     runtime: node
     plan: free
-    buildCommand: npm install && npm run build:web
-    startCommand: npm run start
+    buildCommand: npm install --no-audit --no-fund && npm run build:web
+    startCommand: npx next start -H 0.0.0.0 -p ${PORT:-10000}
+    healthCheckPath: /api/notifications
     envVars:
+      - key: NODE_VERSION
+        value: "24"
       - key: NODE_ENV
         value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=440 --no-deprecation
       - key: GEMINI_API_KEY
         sync: false
       - key: AUTH_SECRET
