@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nivatoon_mobile/data/repositories/nivatoon_repository.dart';
+import 'package:nivatoon_mobile/data/services/ai_assistant_service.dart';
 import 'package:nivatoon_mobile/data/services/cloud_storage_and_db_service.dart';
 import 'package:nivatoon_mobile/data/services/promptpay_service.dart';
 import 'package:nivatoon_mobile/data/services/server_config_service.dart';
@@ -65,5 +66,41 @@ void main() {
     await tester.pumpWidget(const NivatoonApp());
     expect(find.text('NIVATOON'), findsOneWidget);
     expect(find.text('สมาชิกเท่านั้น'), findsOneWidget);
+  });
+
+  test('AiAssistantService, addEpisodeToSeries, upgradePlan & pure Dart default mode', () async {
+    final repo = NivatoonRepository();
+    expect(repo.useLiveWebView, isFalse);
+
+    repo.register(
+      displayName: 'Tester',
+      email: 'tester@nivatoon.app',
+      password: 'Password123!',
+      pin: '123456',
+    );
+    repo.verifyPin('123456');
+
+    final firstSlug = repo.seriesList.first.slug;
+    final beforeEps = repo.seriesList.first.episodes.length;
+    final addEp = repo.addEpisodeToSeries(
+      seriesSlug: firstSlug,
+      episodeTitle: 'ตอนพิเศษทดสอบ',
+      pagePaths: const <String>[],
+      coinPrice: 0,
+    );
+    expect(addEp.ok, isTrue);
+    expect(repo.seriesList.first.episodes.length, beforeEps + 1);
+
+    // Not enough coins for VIP plan
+    final planFail = repo.upgradePlan(planId: 'plus', coinCost: 100);
+    expect(planFail.ok, isFalse);
+
+    const ai = AiAssistantService();
+    final disc = await ai.discoverSeries('แอ็กชัน', repo.seriesList);
+    expect(disc.matches, isNotEmpty);
+    final recap = await ai.recapSeriesOrEpisode(repo.seriesList.first);
+    expect(recap, contains(repo.seriesList.first.title));
+    expect(ai.moderateComment('เว็บพนัน แจกเครดิตฟรี').allowed, isFalse);
+    expect(ai.moderateComment('สนุกมากครับ!').allowed, isTrue);
   });
 }

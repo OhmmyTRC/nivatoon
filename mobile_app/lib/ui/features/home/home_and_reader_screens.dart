@@ -1,9 +1,11 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:nivatoon_mobile/data/repositories/nivatoon_repository.dart';
+import 'package:nivatoon_mobile/data/services/ai_assistant_service.dart';
 import 'package:nivatoon_mobile/domain/models/nivatoon_models.dart';
 import 'package:nivatoon_mobile/ui/core/nivatoon_widgets.dart';
 import 'package:nivatoon_mobile/ui/features/account/wallet_profile_admin_screens.dart';
+import 'package:nivatoon_mobile/ui/features/discover/ai_discover_and_ranking_screens.dart';
 
 /// Main 5-Tab NIVATOON Screen after Login & PIN Unlock.
 class MainHomeShell extends StatefulWidget {
@@ -65,9 +67,42 @@ class _MainHomeShellState extends State<MainHomeShell> {
     );
   }
 
+  void _openAiDiscover() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => AiDiscoverScreen(
+          repo: widget.repo,
+          onOpenSeries: _openSeries,
+        ),
+      ),
+    );
+  }
+
+  void _openRanking() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => RankingScreen(
+          repo: widget.repo,
+          onOpenSeries: _openSeries,
+        ),
+      ),
+    );
+  }
+
+  void _openPlans() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => PlansScreen(repo: widget.repo),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = widget.repo.currentUser!;
+    final user = widget.repo.currentUser;
+    if (user == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     final unread = widget.repo.unreadNotificationCount;
 
     return Scaffold(
@@ -245,6 +280,9 @@ class _MainHomeShellState extends State<MainHomeShell> {
   }
 
   Widget _buildHomeTab(AppUser user) {
+    if (widget.repo.seriesList.isEmpty) {
+      return const Center(child: Text('ยังไม่มีเว็บตูนในคลัง'));
+    }
     final hero = widget.repo.seriesList.first;
     final filtered = _selectedGenre == 'ทั้งหมด'
         ? widget.repo.seriesList
@@ -396,6 +434,33 @@ class _MainHomeShellState extends State<MainHomeShell> {
           ),
         ),
         const SizedBox(height: 14),
+
+        // Quick Feature Row: AI Discover / Ranking / Plans
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: <Widget>[
+              ActionChip(
+                avatar: const Icon(Icons.auto_awesome_rounded, size: 16, color: Color(0xFF00A84B)),
+                label: const Text('AI ค้นหาเรื่องที่ใช่', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12)),
+                onPressed: _openAiDiscover,
+              ),
+              const SizedBox(width: 8),
+              ActionChip(
+                avatar: const Icon(Icons.leaderboard_rounded, size: 16, color: Color(0xFFD97706)),
+                label: const Text('อันดับยอดนิยม', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12)),
+                onPressed: _openRanking,
+              ),
+              const SizedBox(width: 8),
+              ActionChip(
+                avatar: const Icon(Icons.workspace_premium_rounded, size: 16, color: Color(0xFF7C3AED)),
+                label: const Text('แพ็กเกจ Plus/VIP', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12)),
+                onPressed: _openPlans,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
 
         // 7-Day Free Ticket Check-In Card (#11, #12)
         Container(
@@ -626,24 +691,43 @@ class _MainHomeShellState extends State<MainHomeShell> {
                 ),
               ),
               const SizedBox(height: 10),
-              FilledButton.icon(
-                onPressed: () {
-                  if (canUpload) {
-                    _showCreatorUploadDialog();
-                  } else {
-                    setState(() => _tabIndex = 4);
-                  }
-                },
-                style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF00DC64),
-                ),
-                icon: Icon(canUpload ? Icons.upload_rounded : Icons.verified_user_outlined),
-                label: Text(
-                  canUpload
-                      ? '+ อัปโหลดเรื่องใหม่ขึ้น CANVAS'
-                      : 'ขอสิทธิ์ลงผลงานในหน้าโปรไฟล์ (แนบ 1 ผลงานตัวอย่าง)',
-                  style: const TextStyle(fontWeight: FontWeight.w900),
-                ),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: <Widget>[
+                  FilledButton.icon(
+                    onPressed: () {
+                      if (canUpload) {
+                        _showCreatorUploadDialog();
+                      } else {
+                        setState(() => _tabIndex = 4);
+                      }
+                    },
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFF00DC64),
+                    ),
+                    icon: Icon(canUpload ? Icons.upload_rounded : Icons.verified_user_outlined),
+                    label: Text(
+                      canUpload
+                          ? '+ อัปโหลดเรื่องใหม่ขึ้น CANVAS'
+                          : 'ขอสิทธิ์ลงผลงานในหน้าโปรไฟล์ (แนบ 1 ผลงานตัวอย่าง)',
+                      style: const TextStyle(fontWeight: FontWeight.w900),
+                    ),
+                  ),
+                  if (canUpload && widget.repo.seriesList.isNotEmpty)
+                    OutlinedButton.icon(
+                      onPressed: _showAddEpisodeDialog,
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFFB9FF66),
+                        side: const BorderSide(color: Color(0xFF00DC64)),
+                      ),
+                      icon: const Icon(Icons.playlist_add_rounded),
+                      label: const Text(
+                        '+ เพิ่มตอนใหม่ในเรื่องเดิม',
+                        style: TextStyle(fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                ],
               ),
             ],
           ),
@@ -755,6 +839,123 @@ class _MainHomeShellState extends State<MainHomeShell> {
                     backgroundColor: const Color(0xFF00DC64),
                   ),
                   child: const Text('เผยแพร่ทันที'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _showAddEpisodeDialog() async {
+    final seriesList = widget.repo.seriesList;
+    if (seriesList.isEmpty) return;
+    String selectedSlug = seriesList.first.slug;
+    final epTitleCtrl = TextEditingController();
+    final priceCtrl = TextEditingController(text: '0');
+    List<String> pagePaths = <String>[];
+
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext dCtx) {
+        return StatefulBuilder(
+          builder: (BuildContext ctx, void Function(void Function()) setModal) {
+            return AlertDialog(
+              title: const Text(
+                'Creator Studio: เพิ่มตอนใหม่',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    DropdownButtonFormField<String>(
+                      initialValue: selectedSlug,
+                      isExpanded: true,
+                      decoration: const InputDecoration(
+                        labelText: 'เลือกเรื่อง',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: seriesList
+                          .map(
+                            (s) => DropdownMenuItem<String>(
+                              value: s.slug,
+                              child: Text(
+                                s.title,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (v) {
+                        if (v != null) setModal(() => selectedSlug = v);
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: epTitleCtrl,
+                      decoration: const InputDecoration(
+                        labelText: 'ชื่อตอน (เช่น จุดเริ่มต้นบทใหม่)',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: priceCtrl,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'ราคาเหรียญ (0 = อ่านฟรี)',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    OutlinedButton.icon(
+                      onPressed: () async {
+                        final files =
+                            await FilePicker.pickFiles(type: FileType.image);
+                        final paths = files
+                            .map((e) => e.path)
+                            .whereType<String>()
+                            .toList();
+                        if (paths.isNotEmpty) {
+                          setModal(() => pagePaths = paths);
+                        }
+                      },
+                      icon: const Icon(Icons.photo_library_outlined),
+                      label: Text(
+                        pagePaths.isEmpty
+                            ? 'เลือกภาพหน้าตอน (หลายไฟล์)'
+                            : 'เลือกแล้ว ${pagePaths.length} หน้า',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(dCtx).pop(),
+                  child: const Text('ยกเลิก'),
+                ),
+                FilledButton(
+                  onPressed: () {
+                    final coin = int.tryParse(priceCtrl.text.trim()) ?? 0;
+                    final res = widget.repo.addEpisodeToSeries(
+                      seriesSlug: selectedSlug,
+                      episodeTitle: epTitleCtrl.text,
+                      pagePaths: pagePaths,
+                      coinPrice: coin,
+                    );
+                    Navigator.of(dCtx).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(res.message)),
+                    );
+                  },
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFF00DC64),
+                  ),
+                  child: const Text('เพิ่มตอน'),
                 ),
               ],
             );
@@ -907,6 +1108,42 @@ class SeriesDetailScreen extends StatelessWidget {
                           series.synopsis,
                           style: const TextStyle(fontSize: 12, height: 1.45),
                         ),
+                        const SizedBox(height: 8),
+                        OutlinedButton.icon(
+                          onPressed: () async {
+                            final recap = await const AiAssistantService()
+                                .recapSeriesOrEpisode(
+                              series,
+                              apiKey: repo.geminiRawApiKey,
+                              model: repo.geminiModelReasoning,
+                            );
+                            if (!context.mounted) return;
+                            await showDialog<void>(
+                              context: context,
+                              builder: (BuildContext ctx) => AlertDialog(
+                                title: const Text(
+                                  '✨ AI สรุปเนื้อเรื่อง',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                content: Text(recap, style: const TextStyle(fontSize: 13, height: 1.5)),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Navigator.of(ctx).pop(),
+                                    child: const Text('ปิด'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.auto_awesome_rounded, size: 16),
+                          label: const Text(
+                            'AI สรุปเนื้อเรื่อง',
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -920,11 +1157,14 @@ class SeriesDetailScreen extends StatelessWidget {
               const SizedBox(height: 8),
               ...series.episodes.map((ep) {
                 final unlocked = repo.isEpisodeUnlocked(ep);
+                final thumb = ep.pageAssets.isNotEmpty
+                    ? ep.pageAssets.first
+                    : series.coverAsset;
                 return Card(
                   margin: const EdgeInsets.only(bottom: 8),
                   child: ListTile(
                     leading: AdaptiveComicImage(
-                      path: ep.pageAssets.first,
+                      path: thumb,
                       width: 56,
                       height: 44,
                       borderRadius: 8,
@@ -1002,13 +1242,151 @@ class ComicReaderScreen extends StatefulWidget {
 }
 
 class _ComicReaderScreenState extends State<ComicReaderScreen> {
-  bool _showAiOverlay = false;
+  final AiAssistantService _ai = const AiAssistantService();
+  final ScrollController _scrollCtrl = ScrollController();
   final TextEditingController _commentCtrl = TextEditingController();
+
+  bool _showAiOverlay = false;
+  bool _loadingAi = false;
+  double _readProgress = 0.0;
+  final Map<int, String> _translatedPages = <int, String>{};
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollCtrl.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!_scrollCtrl.hasClients) return;
+    final max = _scrollCtrl.position.maxScrollExtent;
+    if (max <= 0) return;
+    final next = (_scrollCtrl.offset / max).clamp(0.0, 1.0);
+    if ((next - _readProgress).abs() >= 0.03) {
+      setState(() => _readProgress = next);
+    }
+  }
 
   @override
   void dispose() {
+    _scrollCtrl.removeListener(_onScroll);
+    _scrollCtrl.dispose();
     _commentCtrl.dispose();
     super.dispose();
+  }
+
+  Future<void> _toggleAiTranslate() async {
+    if (_showAiOverlay) {
+      setState(() => _showAiOverlay = false);
+      return;
+    }
+    setState(() {
+      _showAiOverlay = true;
+      _loadingAi = true;
+    });
+    for (int i = 0; i < widget.episode.pageAssets.length && i < 6; i++) {
+      if (_translatedPages.containsKey(i)) continue;
+      final txt = await _ai.translatePanel(
+        widget.series,
+        widget.episode,
+        i,
+        apiKey: widget.repo.geminiRawApiKey,
+        model: widget.repo.geminiModelReasoning,
+      );
+      _translatedPages[i] = txt;
+    }
+    if (!mounted) return;
+    setState(() => _loadingAi = false);
+  }
+
+  Future<void> _openAiRecap() async {
+    final recap = await _ai.recapSeriesOrEpisode(
+      widget.series,
+      episode: widget.episode,
+      apiKey: widget.repo.geminiRawApiKey,
+      model: widget.repo.geminiModelReasoning,
+    );
+    if (!mounted) return;
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext ctx) => AlertDialog(
+        title: const Text('✨ AI สรุปตอนนี้', style: TextStyle(fontWeight: FontWeight.w900)),
+        content: Text(recap, style: const TextStyle(fontSize: 13, height: 1.5)),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('ปิด'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _openVoiceDrama() async {
+    final script = await _ai.generateVoiceDramaScript(
+      widget.series,
+      widget.episode,
+      apiKey: widget.repo.geminiRawApiKey,
+      model: widget.repo.geminiModelTts,
+    );
+    if (!mounted) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext ctx) => Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text(
+              '🎙️ AI พากย์เสียง (${widget.repo.geminiModelTts})',
+              style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+            ),
+            const SizedBox(height: 10),
+            ...script.map(
+              (line) => Card(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: ListTile(
+                  leading: const Icon(Icons.record_voice_over_rounded, color: Color(0xFF00A84B)),
+                  title: Text(line.speaker, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                  subtitle: Text(line.line, style: const TextStyle(fontSize: 12)),
+                ),
+              ),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('ปิด'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _navigateToEpisode(ComicEpisode target) {
+    final res = widget.repo.unlockEpisode(
+      series: widget.series,
+      episode: target,
+      useTicket: false,
+    );
+    if (!res.ok) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(res.message)),
+      );
+      return;
+    }
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(
+        builder: (_) => ComicReaderScreen(
+          repo: widget.repo,
+          series: widget.series,
+          episode: target,
+        ),
+      ),
+    );
   }
 
   @override
@@ -1017,26 +1395,53 @@ class _ComicReaderScreenState extends State<ComicReaderScreen> {
       widget.series.slug,
       widget.episode.number,
     );
+    final eps = widget.series.episodes;
+    final currentIdx = eps.indexWhere((e) => e.id == widget.episode.id);
+    final prevEp = currentIdx > 0 ? eps[currentIdx - 1] : null;
+    final nextEp = (currentIdx >= 0 && currentIdx + 1 < eps.length)
+        ? eps[currentIdx + 1]
+        : null;
 
     return Scaffold(
       backgroundColor: const Color(0xFF0C0D0F),
       appBar: AppBar(
         backgroundColor: const Color(0xFF121418),
         foregroundColor: Colors.white,
-        title: Text(
-          '${widget.series.title} • Ep.${widget.episode.number}',
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              '${widget.series.title} • Ep.${widget.episode.number}',
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
+            ),
+            LinearProgressIndicator(
+              value: _readProgress,
+              minHeight: 2,
+              backgroundColor: Colors.white12,
+              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF00DC64)),
+            ),
+          ],
         ),
         actions: <Widget>[
+          IconButton(
+            tooltip: 'AI สรุปตอน',
+            onPressed: _openAiRecap,
+            icon: const Icon(Icons.auto_awesome_rounded, color: Color(0xFF00DC64)),
+          ),
+          IconButton(
+            tooltip: 'AI พากย์เสียง',
+            onPressed: _openVoiceDrama,
+            icon: const Icon(Icons.record_voice_over_rounded, color: Color(0xFFFFE066)),
+          ),
           TextButton.icon(
-            onPressed: () => setState(() => _showAiOverlay = !_showAiOverlay),
+            onPressed: _toggleAiTranslate,
             icon: const Icon(
               Icons.translate_rounded,
               color: Color(0xFFB9FF66),
               size: 18,
             ),
             label: Text(
-              _showAiOverlay ? 'ซ่อนคำแปล AI' : 'AI แปลภาพ (v1beta)',
+              _showAiOverlay ? 'ซ่อน' : 'AI แปล',
               style: const TextStyle(
                 color: Color(0xFFB9FF66),
                 fontWeight: FontWeight.w900,
@@ -1047,10 +1452,18 @@ class _ComicReaderScreenState extends State<ComicReaderScreen> {
         ],
       ),
       body: ListView(
+        controller: _scrollCtrl,
         children: <Widget>[
+          if (_loadingAi)
+            const LinearProgressIndicator(
+              minHeight: 3,
+              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFB9FF66)),
+            ),
           ...widget.episode.pageAssets.asMap().entries.map((entry) {
             final idx = entry.key;
             final asset = entry.value;
+            final translated = _translatedPages[idx] ??
+                '✨ Gemini AI แปลหน้า ${idx + 1}: กำลังประมวลผลบทสนทนา...';
             return Stack(
               children: <Widget>[
                 AdaptiveComicImage(
@@ -1074,7 +1487,7 @@ class _ComicReaderScreenState extends State<ComicReaderScreen> {
                         ),
                       ),
                       child: Text(
-                        '✨ Gemini v1beta แปลหน้า ${idx + 1}: "ข้ารู้แล้ว... พลังแห่งดาบจันทราจะปกป้องทุกคนเอง!"',
+                        translated,
                         style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w800,
@@ -1086,6 +1499,32 @@ class _ComicReaderScreenState extends State<ComicReaderScreen> {
               ],
             );
           }),
+          Container(
+            color: const Color(0xFF101216),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: prevEp == null ? null : () => _navigateToEpisode(prevEp),
+                    icon: const Icon(Icons.arrow_back_rounded),
+                    label: Text(prevEp == null ? 'ตอนแรกแล้ว' : 'Ep.${prevEp.number}'),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: FilledButton.icon(
+                    onPressed: nextEp == null ? null : () => _navigateToEpisode(nextEp),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFF00DC64),
+                    ),
+                    icon: const Icon(Icons.arrow_forward_rounded),
+                    label: Text(nextEp == null ? 'ตอนล่าสุดแล้ว' : 'ตอนถัดไป Ep.${nextEp.number}'),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Container(
             color: const Color(0xFF14171D),
             padding: const EdgeInsets.all(16),
@@ -1117,6 +1556,13 @@ class _ComicReaderScreenState extends State<ComicReaderScreen> {
                     const SizedBox(width: 8),
                     FilledButton(
                       onPressed: () {
+                        final mod = _ai.moderateComment(_commentCtrl.text);
+                        if (!mod.allowed) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(mod.reason)),
+                          );
+                          return;
+                        }
                         widget.repo.addComment(
                           widget.series.slug,
                           widget.episode.number,

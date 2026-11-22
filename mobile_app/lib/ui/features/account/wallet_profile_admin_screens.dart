@@ -230,6 +230,16 @@ class _ProfileHubViewState extends State<ProfileHubView> {
   final TextEditingController _issueDescCtrl = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    final user = widget.repo.currentUser;
+    if (user != null) {
+      _nameCtrl.text = user.displayName;
+      _bioCtrl.text = user.bio;
+    }
+  }
+
+  @override
   void dispose() {
     _nameCtrl.dispose();
     _bioCtrl.dispose();
@@ -364,9 +374,10 @@ class _ProfileHubViewState extends State<ProfileHubView> {
 
   @override
   Widget build(BuildContext context) {
-    final user = widget.repo.currentUser!;
-    if (_nameCtrl.text.isEmpty) _nameCtrl.text = user.displayName;
-    if (_bioCtrl.text.isEmpty) _bioCtrl.text = user.bio;
+    final user = widget.repo.currentUser;
+    if (user == null) {
+      return const Center(child: Text('กรุณาเข้าสู่ระบบ'));
+    }
 
     return ListView(
       padding: const EdgeInsets.all(14),
@@ -609,6 +620,10 @@ class _ProfileHubViewState extends State<ProfileHubView> {
             children: <MapEntry<String, String>>[
               const MapEntry<String, String>('profile', 'แต่งโปรไฟล์'),
               MapEntry<String, String>(
+                'library',
+                'เรื่องที่ติดตาม (${user.librarySlugs.length})',
+              ),
+              MapEntry<String, String>(
                 'purchased',
                 'ตอนที่ซื้อแล้ว (${user.unlockedChapters.length})',
               ),
@@ -684,6 +699,39 @@ class _ProfileHubViewState extends State<ProfileHubView> {
                   ),
                 ],
               ),
+            ),
+          )
+        else if (_subTab == 'library')
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: user.librarySlugs.isEmpty
+                  ? const Text('ยังไม่มีเรื่องที่กดติดตามไว้')
+                  : Column(
+                      children: widget.repo.seriesList
+                          .where((s) => user.librarySlugs.contains(s.slug))
+                          .map(
+                            (s) => ListTile(
+                              leading: AdaptiveComicImage(
+                                path: s.coverAsset,
+                                width: 44,
+                                height: 58,
+                                borderRadius: 8,
+                              ),
+                              title: Text(
+                                s.title,
+                                style: const TextStyle(fontWeight: FontWeight.w800),
+                              ),
+                              subtitle: Text('${s.genreThai} • ${s.episodes.length} ตอน'),
+                              trailing: IconButton(
+                                tooltip: 'เลิกติดตาม',
+                                icon: const Icon(Icons.bookmark_remove_outlined),
+                                onPressed: () => widget.repo.toggleLibrary(s.slug),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
             ),
           )
         else if (_subTab == 'purchased')

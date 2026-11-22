@@ -18,22 +18,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Set up Java 17
+      - name: Set up Java 21
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
-      - name: Verify pre-built & analyzed NIVATOON APK package
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Analyze and Test Pure Dart App
+        working-directory: mobile_app
         run: |
-          mkdir -p mobile_app/build/app/outputs/flutter-apk
-          if [ -f "nivatoon-release.apk" ]; then
-            cp nivatoon-release.apk mobile_app/build/app/outputs/flutter-apk/app-release.apk
-            ls -lh mobile_app/build/app/outputs/flutter-apk/app-release.apk
-          else
-            echo "nivatoon-release.apk not found"
-            exit 1
-          fi
+          flutter pub get
+          flutter analyze
+          flutter test
+
+      - name: Build Release APK
+        working-directory: mobile_app
+        run: flutter build apk --release
 
       - name: Upload Release APK Artifact
         uses: actions/upload-artifact@v4

@@ -20,7 +20,7 @@ class NivatoonRepository extends ChangeNotifier {
         _cloud = cloudService ?? CloudStorageAndDbService() {
     _seedInitialData();
     if (autoCloudSync) {
-      _useLiveWebView = true;
+      _useLiveWebView = false;
       unawaited(syncWithGitHubAndFirebase());
     }
   }
@@ -52,6 +52,7 @@ class NivatoonRepository extends ChangeNotifier {
   String githubPersonalAccessToken = '';
 
   // Admin configurable AI & SMTP settings
+  String geminiRawApiKey = '';
   String geminiApiKeyMasked = 'AIza••••7uQ (v1beta)';
   String geminiModelReasoning = 'gemini-4-hydrogen';
   String geminiModelTts = 'gemini-3.8-flash-tts';
@@ -1814,6 +1815,7 @@ class NivatoonRepository extends ChangeNotifier {
   }) {
     if (newGeminiKey != null && newGeminiKey.trim().isNotEmpty) {
       final k = newGeminiKey.trim();
+      geminiRawApiKey = k;
       geminiApiKeyMasked = k.length > 8
           ? '${k.substring(0, 4)}••••${k.substring(k.length - 3)} (v1beta)'
           : '•••• (v1beta)';
@@ -1833,5 +1835,109 @@ class NivatoonRepository extends ChangeNotifier {
     strictSlipCheck = strictSlip;
     _addLog('security', 'admin-settings', 'อัปเดตตั้งค่า AI v1beta / GitHub Token / SMTP / กฎตรวจสลิป', 'admin');
     notifyListeners();
+  }
+
+  /// Adds a new episode to an existing series from Creator Studio.
+  ({bool ok, String message}) addEpisodeToSeries({
+    required String seriesSlug,
+    required String episodeTitle,
+    required List<String> pagePaths,
+    required int coinPrice,
+  }) {
+    final user = _currentUser;
+    if (user == null) {
+      return (ok: false, message: 'กรุณาเข้าสู่ระบบก่อน');
+    }
+    final idx = _seriesList.indexWhere((s) => s.slug == seriesSlug);
+    if (idx < 0) {
+      return (ok: false, message: 'ไม่พบเรื่องที่เลือก');
+    }
+    final target = _seriesList[idx];
+    final nextNum = target.episodes.isEmpty
+        ? 1
+        : target.episodes
+                .map((e) => e.number)
+                .reduce((a, b) => a > b ? a : b) +
+            1;
+    final pages = pagePaths.isNotEmpty
+        ? pagePaths
+        : <String>[
+            '/comics/01-moonlit-sword/ep-01/001.jpg',
+            '/comics/01-moonlit-sword/ep-01/002.jpg',
+          ];
+    final ep = ComicEpisode(
+      id: '$seriesSlug-ep-$nextNum',
+      number: nextNum,
+      title: episodeTitle.trim().isEmpty
+          ? 'ตอนที่ $nextNum'
+          : episodeTitle.trim(),
+      coinPrice: coinPrice < 0 ? 0 : coinPrice,
+      publishedAt: _todayKey(),
+      pageAssets: pages,
+    );
+    target.episodes.add(ep);
+    _addLog(
+      'studio',
+      'add-episode',
+      'เพิ่มตอนที่ $nextNum ในเรื่อง ${target.title}',
+      user.email,
+    );
+    if (autoCloudSync) {
+      unawaited(
+        _cloud.upsertFirebaseDoc('series', target.slug, <String, dynamic>{
+          'slug': target.slug,
+          'title': target.title,
+          'episodesCount': target.episodes.length,
+          'updatedAt': DateTime.now().toIso8601String(),
+        }),
+      );
+    }
+    notifyListeners();
+    return (ok: true, message: 'เพิ่ม Ep.$nextNum ใน "${target.title}" สำเร็จ');
+  }
+
+  /// Upgrades the current user's subscription plan using Coins.
+  ({bool ok, String message}) upgradePlan({
+    required String planId,
+    required int coinCost,
+    int bonusTickets = 0,
+  }) {
+    final user = _currentUser;
+    if (user == null) {
+      return (ok: false, message: 'กรุณาเข้าสู่ระบบก่อน');
+    }
+    if (user.plan == planId) {
+      return (ok: false, message: 'คุณใช้งานแพ็กเกจ ${planId.toUpperCase()} อยู่แล้ว');
+    }
+    if (user.coinBalance < coinCost) {
+      return (
+        ok: false,
+        message: 'เหรียญไม่พอ (ต้องการ $coinCost เหรียญ แต่มี ${user.coinBalance} เหรียญ)',
+      );
+    }
+    user.coinBalance -= coinCost;
+    user.plan = planId;
+    if (bonusTickets > 0) {
+      user.freePassTickets += bonusTickets;
+    }
+    user.transactions.insert(
+      0,
+      WalletTransactionRecord(
+        id: 'tx-plan-${DateTime.now().millisecondsSinceEpoch}',
+        reference: 'PLAN-${planId.toUpperCase()}',
+        title: 'อัปเกรดแพ็กเกจ ${planId.toUpperCase()}',
+        provider: 'Coin Balance',
+        coins: -coinCost,
+        amountTHB: 0,
+        createdAt: DateTime.now().toIso8601String().substring(0, 16),
+      ),
+    );
+    _addLog('wallet', 'upgrade-plan', 'อัปเกรดเป็น $planId', user.email);
+    _syncUserToFirebase(user);
+    notifyListeners();
+    return (
+      ok: true,
+      message: 'อัปเกรดเป็น ${planId.toUpperCase()} สำเร็จ! (+$bonusTickets ตั๋วฟรี)',
+    );
   }
 }
