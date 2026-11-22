@@ -66,6 +66,7 @@ flutter:
 
   assets:
     - assets/comics/
+    - assets/comics/absolute-regression/
     - assets/qr/
     - assets/webapp/
 

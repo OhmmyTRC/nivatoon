@@ -86,9 +86,10 @@ class AdaptiveComicImage extends StatelessWidget {
   }
 
   Widget _fallbackOrPlaceholder() {
-    if (fallbackAsset != null && fallbackAsset!.startsWith('assets/')) {
+    final candidate = fallbackAsset ?? _resolveBundledAssetFallback(path);
+    if (candidate != null && candidate.startsWith('assets/')) {
       return Image.asset(
-        fallbackAsset!,
+        candidate,
         width: width,
         height: height,
         fit: fit,
@@ -96,6 +97,45 @@ class AdaptiveComicImage extends StatelessWidget {
       );
     }
     return _placeholder();
+  }
+
+  static String? _resolveBundledAssetFallback(String rawPath) {
+    final decoded = Uri.decodeFull(rawPath).trim();
+    if (decoded.startsWith('assets/')) return decoded;
+
+    final fileName = decoded.split('/').last.split('?').first;
+    if (fileName.startsWith('Absolute-Regression-ep1-') &&
+        fileName.endsWith('.jpg')) {
+      return 'assets/comics/absolute-regression/$fileName';
+    }
+
+    const coverMap = <String, String>{
+      '11Absolute-Regression': 'assets/comics/11-absolute-regression-cover.jpg',
+      '01-moonlit-sword': 'assets/comics/01-moonlit-sword-cover.jpg',
+      '02-palace-bloom': 'assets/comics/02-palace-bloom-cover.jpg',
+      '03-unrivaled-system': 'assets/comics/03-unrivaled-system-cover.jpg',
+      '04-reborn-as-demon': 'assets/comics/04-reborn-as-demon-cover.jpg',
+      '05-letter-from-tomorrow': 'assets/comics/05-letter-from-tomorrow-cover.jpg',
+      '06-rank-zero-hunter': 'assets/comics/06-rank-zero-hunter-cover.jpg',
+      '07-eclipse-academy': 'assets/comics/07-eclipse-academy-cover.jpg',
+      '08-shadow-apothecary': 'assets/comics/08-shadow-apothecary-cover.jpg',
+      '09-neon-shinjuku-99': 'assets/comics/09-neon-shinjuku-99-cover.jpg',
+      '10-duchess-contract': 'assets/comics/10-duchess-contract-cover.jpg',
+    };
+
+    if (fileName == 'cover.jpg') {
+      for (final entry in coverMap.entries) {
+        if (decoded.contains(entry.key)) return entry.value;
+      }
+      return 'assets/comics/01-moonlit-sword-cover.jpg';
+    }
+
+    if (fileName == '001.jpg') return 'assets/comics/page-01.jpg';
+    if (fileName == '002.jpg') return 'assets/comics/page-02.jpg';
+    if (fileName == '003.jpg') return 'assets/comics/page-03.jpg';
+    if (fileName == '004.jpg') return 'assets/comics/page-04.jpg';
+
+    return null;
   }
 
   Widget _placeholder() {
